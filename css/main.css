@@ -1594,7 +1594,7 @@ input::-moz-focus-inner {
 
 @media screen and (max-width:400px) {
   .section-intro {
-    margin-bottom: 9.6rem;
+    margin-bottom: 0rem;
   }
 
   .section-intro::before {
