@@ -46,7 +46,7 @@ a {
   .custom-navbar .custom-navbar-nav li a {
     font-weight: 500;
     color: #ffffff !important;
-    opacity: .5;
+    opacity: 1;
     -webkit-transition: .3s all ease;
     -o-transition: .3s all ease;
     transition: .3s all ease;
@@ -556,7 +556,7 @@ a {
 
 .footer-section {
   padding: 60px 0;
-  background: #eff2f1; }
+  background: #ffffff; }
   @media (max-width: 700px) {
     .footer-section {
       padding: 0 0 0 0;
