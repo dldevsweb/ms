@@ -1,5 +1,0 @@
-# by GiraffeWeb Studio
-
-User-agent: *
-Disallow: 
-Sitemap: http://elizavetanails.site/sitemap.xml
