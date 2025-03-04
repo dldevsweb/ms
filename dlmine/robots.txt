@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+Host: www.dlmine.ru
+Sitemap: http://dlmine.ru/sitemap.xml

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+
+<title>Ticket one</title>
+<meta charset="utf-8">
+</head>
+<body>
+
+<h1>Введите значение точности вычисления:</h1>
+<input id='accuracy' placeholder="Ваше значение" onchange="answer()" style='height: 30px;width: 30%;'>
+<script>
+function answer() {
+var accuracy = document.getElementById('accuracy').value;
+var n = 0;
+var sum = 0;
+
+if (accuracy > 0) {
+    while (n<=accuracy) {
+        var value_first = 1/(10**n);
+        n++;
+        var value_second = 3/(10**(n));
+        n++;
+        var value_three = 5/(10**(n));
+        n++;
+        var value = value_first + value_second + value_three;
+        sum += value;
+    }
+    Swal.fire({
+    icon: 'success',
+    title: 'Отлично, итоговый результат равен ' + sum
+})
+} else {
+    Swal.fire({
+    icon: 'error',
+    title: 'Вам необходимо ввести корректные значения, которые > 0'
+})
+}
+
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

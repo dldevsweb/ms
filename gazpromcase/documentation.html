@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GazpromCase || Автоматизированная система обработки кернов</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicons/logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicons/logo.png">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicons/logo.png">
+    <link rel="manifest" href="assets/img/favicons/manifest.json">
+    <meta name="msapplication-TileImage" content="assets/img/favicons/mstile-150x150.png">
+    <meta name="theme-color" content="#ffffff">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,300&amp;display=swap" rel="stylesheet">
+    <link href="assets/lib/prismjs/prism-okaidia.css" rel="stylesheet">
+    <link href="assets/css/theme.css" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Main -->
+    <main class="main">
+      <nav class="navbar navbar-expand-lg navbar-light bg-white py-4 pl-0">
+        <div class="container"><a class="navbar-brand text-primary font-weight-bold" href="index.html"> GazpromCase </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item text-muted"><a class="nav-link active" aria-current="page" href="index.html">Вступление</a></li>
+              <li class="nav-item dropdown"><a class="nav-link" id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-expanded="false">Описание</a>
+                <ul class="dropdown-menu navbar-dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item text-secondary p-3 border-bottom" href="index.html#team">Команда</a></li>
+                  <li><a class="dropdown-item text-secondary p-3 border-bottom" href="http://bit.ly/SIRIUS_CORE_DATA">База данных</a></li>
+                  <li><a class="dropdown-item text-secondary p-3 border-bottom" href="index.html#faq">Ответы на вопросы</a></li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown"><a class="nav-link" id="navbarDropdowndoc" href="#" role="button" data-toggle="dropdown" aria-expanded="false">Фундамент</a>
+                <div class="dropdown-menu navbar-dropdown-menu" aria-labelledby="navbarDropdowndoc">
+                  <div class="list-group list-group-flush"><a class="list-group-item py-3 d-flex align-items-center" href="documentation.html"><img src="assets/img/gallery/document.png" alt="" />
+                      <div class="ml-3"><span class="font-weight-bold text-uppercase text-primary">Документация</span>
+                        <p class="text-secondary mb-0">Полноценное описание научного проекта</p>
+                      </div>
+                    </a><a class="list-group-item py-3 d-flex align-items-center" href="#"><img src="assets/img/gallery/components.png" alt="" />
+                      <div class="ml-3"><span class="font-weight-bold text-uppercase text-primary">Компоненты</span>
+                        <p class="text-secondary mb-0">Описание основных компонентов, задействованных в работе</p>
+                        <p>СКОРО</p>
+                      </div>
+                    </a><a class="list-group-item py-3 d-flex align-items-center" href="#"><img src="assets/img/gallery/bar_chart.png" alt="" />
+                      <div class="ml-3"><span class="font-weight-bold text-uppercase text-primary">ЖУРНАЛ ИЗМЕНЕНИЙ <span class="badge badge-secondary bg-light text-primary">1.0.0</span></span>
+                        <p>СКОРО</p>
+                      </div>
+                    </a></div>
+                </div>
+              </li>
+            </ul><a class="btn btn-primary ml-auto hover-top-shadow" href="page-starter">Начать</a>
+          </div>
+        </div>
+      </nav>
+      <div class="container">
+        <div class="row mt-3">
+          <div class="col-lg-9 col-xxl-10">
+            <div class="card shadow-sm mb-3">
+              <div class="card-header px-4 py-3">
+                <h5 class="mb-0 contains-anchor" id="quick-start">Цель проекта<a class="anchor" href="#quick-start"> #</a></h5>
+              </div>
+              <div class="card-body p-4">
+                <p class="mb-0">Целью проекта является создание автоматизированной системы, с помощью которой можно обрабатывать керны и получать полную характеристику. Для этого были поставлены и реализованы следующие задачи: расписать план реализации проекта поэтапно, выбрать программное обеспечение для автоматического анализа, библиотеку искусственного отбора изображений, создать готовый программный код, проделанную работу представить в виде полноценно работающего веб-сайта без ошибок.<br> Начало кода представлено на странице сайта<a class="text-decoration-none" href="page-starter"> <code>www.gazpromcase.ru/page-starter</code></a>.</p>
+              </div>
+            </div>
+
+            <div class="card shadow-sm mb-3">
+              <div class="card-header px-4 py-3">
+                <h5 class="mb-0 contains-anchor" id="quick-start">Материалы и методы<a class="anchor" href="#quick-start"> #</a></h5>
+              </div>
+              <div class="card-body p-4">
+                <p class="mb-0">Работа с огромными слоями информации, анализ и их классификация — главная возможность умного алгоритма, который мы хотим разработать. Нейронные сети отличным способом подходят для оценки керна и для разделения горных пород по типам. Они могут использоваться для распознавания изображений, в том числе кернов. Мы использовали изображения кернов в качестве входных данных, полученные с финального этапа конкурса «Родные города» 2021 года от компании ПАО «Газпром Нефть».</p>
+              </div>
+            </div>
+
+            <div class="card shadow-sm mb-3">
+              <div class="card-header px-4 py-3">
+                <h5 class="mb-0 contains-anchor" id="quick-start">Для кого?<a class="anchor" href="#quick-start"> #</a></h5>
+              </div>
+              <div class="card-body p-4">
+                <p class="mb-0">Целевой аудиторией в данном проекте выступает непосредственно заказчик – «Газпром Нефть», интеллектуальный турнир «Родные города». Компанией было дано задание по реализации кейса для обработки и отбора изображений кернов. Данный проект упрощает работу компании: автоматизирует процесс, не задействуя сотрудников для анализа самих кернов. Объём рынка: российский.</p>
+              </div>
+            </div>
+
+            <div class="card shadow-sm mb-3">
+              <div class="card-header px-4 py-3">
+                <h5 class="mb-0 contains-anchor" id="quick-start">Научно-технологическая новизна<a class="anchor" href="#quick-start"> #</a></h5>
+              </div>
+              <div class="card-body p-4">
+                <p class="mb-0">На территории РФ нет подобных новшеств для анализа кернов, всё выполняется вручную людьми, что замедляет процессы компании. Аналоги находятся в зарубежных странах, но они являются интеллектуальной собственностью и находятся в закрытом доступе. Наш проект позволяет всем сотрудникам компании работать в режиме реального времени на нашей системе (платформе): загружать керны в систему и получать готовый результат. Работа может использоваться также в учебных целях: различными университетами, как пример лабораторной работы с следующим заданием: решить подобный реалистичный заказ от нефтегазовой компании.</p>
+              </div>
+            </div>
+
+            <div class="card shadow-sm mb-3">
+              <div class="card-header px-4 py-3">
+                <h5 class="mb-0 contains-anchor" id="quick-start">Результаты<a class="anchor" href="#quick-start"> #</a></h5>
+              </div>
+              <div class="card-body p-4">
+                <p class="mb-0">Создан веб-сайт <a class="text-decoration-none" href="index.html"> <code>www.gazpromcase.ru</code></a> с системой, построенной на нейронных связях, способной автоматически анализировать и классифицировать сегменты керна по разным типам горных пород. Система распознавания изображений будет построена на алгоритме, не требующем обработки в реальном времени — JavaScript Image Processing Library. Сайт работает следующим образом: пользователь проходит авторизацию на сайте, загружает фото в базу данных, происходит обработка, затем выдается результат.</p>
+              </div>
+            </div>
+
+            <div class="card shadow-sm mb-3">
+              <div class="card-header px-4 py-3">
+                <h5 class="mb-0 contains-anchor" id="quick-start">Выводы<a class="anchor" href="#quick-start"> #</a></h5>
+              </div>
+              <div class="card-body p-4">
+                <p class="mb-0">Сайт на данный момент является прототипом будущей платформый для потенциальных сотрудников. Будет реализована административная панель для загрузки изображений кернов в базу данных, а также возможность получения итоговых отчётов с классификацией пород. Базы данных изображений будут подразделяться на частные и открытые. Частные изображения кернов принадлежат компаниям. Открытые изображения взяты с кейса от Образовательного Центра «Сириус» и компании «Газпром Нефть». Сайт будет развиваться, его заполняемость будет увеличиваться.</p>
+              </div>
+            </div>
+
+            <div class="card shadow-sm mb-3">
+              <div class="card-header px-4 py-3">
+                <h5 class="mb-0 contains-anchor" id="setting-up-build-system">Примерный вариант реализации<a class="anchor" href="#setting-up-build-system"> #</a></h5>
+              </div>
+              <div class="card-body p-4">
+                <pre><code class="lang-html">сначала фотография загружается в базу данных, обрабатывается столько времени, сколько необходимо и выдаёт результат
+</code></pre>
+                <pre><code class="lang-html">отдельный программный код забирает получившуюся картинку и загружает её на сайт
+</code></pre>
+</code></pre>
+                <p class="mt-4">На данный момент на сайте загружены фотографии уже проанализированных системой кёрнов. Она каждый раз выдаёт то или иное изображение керн только по одной классификации: тёмные пигменты на фото (это является признаком углеводородов).</p>
+    
+                <div class="alert alert-warning">Данный проект запущен <code>в тестовом режиме</code>, допускаются неточности.</div>
+</code></pre>
+                <p class="mt-4">Сайт находится в открытом доступе.</p>
+              </div>
+            </div>
+            <h3 class="mt-6 mb-4 contains-anchor" id="rtl">Конструкция сайта<a class="anchor" href="#rtl">#</a></h3>
+            <div class="card shadow-sm mb-3">
+              <div class="card-header px-4 py-3">
+                <h5 class="mb-0 contains-anchor" id="setting-up-html">Сайт построен на HTML/JS.<a class="anchor" href="#setting-up-html"> #</a></h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+            </section>
+
+    <!-- Footer -->
+
+            <section class="py-7">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-4 col-lg-3">
+                    <h4 class="text-primary font-weight-bold">GazpromCase</h4>
+                    <p class="mb-2 text-muted">Все решения <br> в одной системе.</p>
+                    <ul class="list-unstyled list-inline mb-6 mb-md-0">
+                    </ul>
+                  </div>
+                  <div class="col-6 col-md-4 col-lg-2">
+                    <h6 class="footer-title">ВВЕДНИЕ</h6>
+                    <ul class="list-unstyled mb-6 mb-md-4 mb-lg-0">
+                      <li class="mb-2 mb-lg-2"><a class="text-500 text-decoration-none" href="index.html#about">Описание</a></li>
+                      <li class="mb-2 mb-lg-2"><a class="text-500 text-decoration-none" href="index.html#tean">Команда</a></li>
+                      <li class="mb-2 mb-lg-2"><a class="text-500 text-decoration-none" href="index.html#faq">Ответы на вопросы</a></li>
+                      <li class="mb-2 mb-lg-2"><a class="text-500 text-decoration-none" href="">Журнал изменений <sup> СКОРО</sup></a></li>
+                    </ul>
+                  </div>
+                  <div class="col-6 col-md-4 col-lg-2">
+                    <h6 class="footer-title">СИСТЕМА</h6>
+                    <ul class="list-unstyled mb-6 mb-md-4 mb-lg-0">
+                      <li class="mb-2 mb-lg-2"><a class="text-500 text-decoration-none" href="http://gazpromcase.ru/documentation">Документация</a></li>
+                      <li class="mb-2 mb-lg-2"><a class="text-500 text-decoration-none" href="http://bit.ly/SIRIUS_CORE_DATA">База данных</a></li>
+                      <li class="mb-2 mb-lg-2"><a class="text-500 text-decoration-none" href="http://gazpromcase.ru/page-starter.html#loaded">Результаты</a></li>
+                    </ul>
+                  </div>
+                  <div class="col-6 col-md-4 offset-md-4 col-lg-2 offset-lg-0">
+                    <h6 class="footer-title">ТЕХНОЛОГИИ</h6>
+                    <ul class="list-unstyled mb-0">
+                      <li class="mb-2 mb-lg-2"><a class="text-500 text-decoration-none" href="">HTML + CSS</a></li>
+                      <li class="mb-2 mb-lg-2"><a class="text-500 text-decoration-none" href="">JavaScript</a></li>
+                      <li class="mb-2 mb-lg-2"><a class="text-500 text-decoration-none" href="https://github.com/image-js/image-js">JS Image Processing Library <sup> СКОРО</sup></a></li>
+                      <li class="mb-2 mb-lg-2"><a class="text-500 text-decoration-none" href="https://angular.io/">Angular<sup> СКОРО</sup></a></li>
+                    </ul>
+                  </div>
+                  <div class="col-6 col-md-4 col-lg-2">
+                    <h6 class="footer-title">При поддержке</h6>
+                    <ul class="list-unstyled mb-0">
+                      <li class="mb-2 mb-lg-2"><a class="text-500 text-decoration-none" href="https://www.gubkin.ru/">РГУ нефти и газа им. И.М. Губкина</a></li>
+                      <li class="mb-2 mb-lg-2"><a class="text-500 text-decoration-none" href="https://sochisirius.ru/">ОЦ "Сириус"</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </section>
+      <section class="text-center border-top footer-text py-3">
+
+        <div class="container"> Система находится на начальной стадии разработки.
+        </div>
+      </section>
+    </main>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+    <script src="assets/js/plugins.js"></script>
+    <script src="assets/lib/is/is.min.js"></script>
+    <script src="assets/lib/stickyfilljs/stickyfill.min.js"></script>
+    <script src="assets/lib/prismjs/prism.js"></script>
+    <script src="assets/js/theme.js"></script>
+  </body>
+</html>

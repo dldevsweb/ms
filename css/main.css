@@ -2771,7 +2771,7 @@ html.no-csstransitions .hero-content {
 
 @media screen and (max-width:800px) {
   .s-services {
-    padding-top: 20rem;
+    padding-top: 5rem;
   }
 
   .s-services__content .s-services__leftcol {
@@ -3026,7 +3026,7 @@ html.no-csstransitions .hero-content {
 
 @media screen and (max-width:800px) {
   .s-portfolio {
-    padding-top: 20rem;
+    padding-top: 5rem;
   }
 
   .folio-item__thumb a::after {

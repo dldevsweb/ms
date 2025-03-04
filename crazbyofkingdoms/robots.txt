@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+Host: www.coklans.ru
+Sitemap: http://coklans.ru/sitemap.xml
