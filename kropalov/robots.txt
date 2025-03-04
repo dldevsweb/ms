@@ -1,0 +1,5 @@
+# GiraffeWeb
+
+User-agent: *
+Disallow: 
+Sitemap: https://vlaskropalov.ru/sitemap.xml

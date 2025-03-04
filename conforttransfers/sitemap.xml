@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+		<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url>
+	<loc>http://conforttransfer.ru/</loc>
+	<lastmod>2019-12-30T15:27:55+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>http://conforttransfer.ru/index.html</loc>
+	<lastmod>2019-12-30T15:27:57+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>http://conforttransfer.ru/faq.html</loc>
+	<lastmod>2019-12-30T15:27:59+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>http://conforttransfer.ru/contact.html</loc>
+	<lastmod>2019-12-30T15:28:00+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+</urlset>
