@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>СТЕГАНОГРАФИЯ | CTF Challenge</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000;
+            color: #00ff00;
+            font-family: 'Share Tech Mono', monospace;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Эффект сканирования */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 0, 0.03),
+                rgba(0, 255, 0, 0.03) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        /* Мигающий курсор */
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .cursor {
+            animation: blink 1s infinite;
+        }
+        
+        /* Анимация появления текста */
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 2px solid #00ff00;
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px #00ff00;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            letter-spacing: 5px;
+            margin-bottom: 10px;
+            animation: flicker 3s infinite;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            color: #00ff41;
+        }
+        
+        .task-container {
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #00ff00;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+        
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #00ff00;
+        }
+        
+        .task-number {
+            font-size: 1.5em;
+            color: #00ff41;
+            text-shadow: 0 0 10px #00ff41;
+        }
+        
+        .task-status {
+            padding: 5px 15px;
+            border: 1px solid #00ff00;
+            background: rgba(0, 255, 0, 0.1);
+        }
+        
+        .task-status.completed {
+            background: rgba(0, 255, 0, 0.3);
+            color: #00ff41;
+        }
+        
+        .task-description {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+        
+        .file-download {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .file-download:hover {
+            background: rgba(0, 255, 0, 0.2);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        .input-group {
+            margin: 20px 0;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #00ff41;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1em;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        .btn {
+            padding: 10px 30px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: rgba(0, 255, 0, 0.2);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        }
+        
+        .btn:active {
+            transform: scale(0.95);
+        }
+        
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px solid;
+            display: none;
+        }
+        
+        .message.success {
+            border-color: #00ff41;
+            background: rgba(0, 255, 65, 0.1);
+            color: #00ff41;
+            display: block;
+        }
+        
+        .message.error {
+            border-color: #ff0000;
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff0000;
+            display: block;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .hint {
+            margin-top: 15px;
+            padding: 10px;
+            border-left: 3px solid #00ff41;
+            background: rgba(0, 255, 0, 0.05);
+            font-size: 0.9em;
+            color: #00ff41;
+        }
+        
+        .terminal {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ff00;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Share Tech Mono', monospace;
+            overflow-x: auto;
+        }
+        
+        .terminal::before {
+            content: '$ ';
+            color: #00ff41;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            border: 1px solid #00ff00;
+            background: rgba(0, 0, 0, 0.8);
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff00, #00ff41);
+            width: 0%;
+            transition: width 0.5s;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        .glitch {
+            position: relative;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00ff;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 #00ffff, 2px 2px #ff00ff;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 1s infinite linear alternate-reverse;
+        }
+        
+        @keyframes glitch-anim {
+            0% { clip: rect(31px, 9999px, 94px, 0); }
+            20% { clip: rect(54px, 9999px, 66px, 0); }
+            40% { clip: rect(28px, 9999px, 98px, 0); }
+            60% { clip: rect(67px, 9999px, 34px, 0); }
+            80% { clip: rect(10px, 9999px, 85px, 0); }
+            100% { clip: rect(78px, 9999px, 5px, 0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="glitch" data-text="СТЕГАНОГРАФИЯ">СТЕГАНОГРАФИЯ</h1>
+            <p>[ CTF Challenge | 5 Levels ]</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+        </div>
+        
+        <!-- Задание 1 -->
+        <div class="task-container" id="task1">
+            <div class="task-header">
+                <span class="task-number">ЗАДАНИЕ 1/5</span>
+                <span class="task-status" id="status1">[ ЗАБЛОКИРОВАНО ]</span>
+            </div>
+            <div class="task-description">
+                <p>&gt; Инициализация задания...</p>
+                <p>&gt; Обнаружен текстовый файл. Найдите буквы по указанным позициям.</p>
+                <div class="terminal" id="task-content1">
+                    <pre id="task-text1" style="white-space: pre-wrap; font-family: 'Share Tech Mono', monospace;"></pre>
+                </div>
+                <div class="hint">
+                    Подсказка: Позиции считаются с начала текста. Пробелы и знаки препинания НЕ учитываются - только буквы и цифры.
+                    Пройдитесь по тексту и найдите символ на каждой указанной позиции.
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="answer1">Введите ключ к заданию 2 (русское слово):</label>
+                <input type="text" id="answer1" placeholder="Ваш ответ">
+                <button class="btn" onclick="checkAnswer(1)">[ ПРОВЕРИТЬ ]</button>
+                <div class="message" id="message1"></div>
+            </div>
+        </div>
+        
+        <!-- Задание 2 -->
+        <div class="task-container hidden" id="task2">
+            <div class="task-header">
+                <span class="task-number">ЗАДАНИЕ 2/5</span>
+                <span class="task-status" id="status2">[ ЗАБЛОКИРОВАНО ]</span>
+            </div>
+            <div class="task-description">
+                <p>&gt; Доступ получен к заданию 2...</p>
+                <p>&gt; Обнаружено зашифрованное сообщение. Используется шифр Цезаря.</p>
+                <div class="terminal" id="task-content2">
+                    <pre id="task-text2" style="white-space: pre-wrap; font-family: 'Share Tech Mono', monospace;"></pre>
+                </div>
+                <div class="hint">
+                    Подсказка: Шифр Цезаря сдвигает каждую букву на определенное количество позиций. 
+                    Для расшифровки нужно сдвинуть символы в обратную сторону. 
+                    Алфавит: A-Z (A после Z замыкается), цифры: 0-9 (9 после 0 замыкается).
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="answer2">Введите ключ к заданию 3:</label>
+                <input type="text" id="answer2" placeholder="KEY_...">
+                <button class="btn" onclick="checkAnswer(2)">[ ПРОВЕРИТЬ ]</button>
+                <div class="message" id="message2"></div>
+            </div>
+        </div>
+        
+        <!-- Задание 3 -->
+        <div class="task-container hidden" id="task3">
+            <div class="task-header">
+                <span class="task-number">ЗАДАНИЕ 3/5</span>
+                <span class="task-status" id="status3">[ ЗАБЛОКИРОВАНО ]</span>
+            </div>
+            <div class="task-description">
+                <p>&gt; Доступ получен к заданию 3...</p>
+                <p>&gt; Обнаружено сообщение, закодированное ASCII кодами.</p>
+                <div class="terminal" id="task-content3">
+                    <pre id="task-text3" style="white-space: pre-wrap; font-family: 'Share Tech Mono', monospace;"></pre>
+                </div>
+                <div class="hint">
+                    Подсказка: ASCII - это стандарт кодирования символов. Каждому символу соответствует число.
+                    A-Z = 65-90, a-z = 97-122, 0-9 = 48-57, _ = 95. 
+                    Преобразуйте каждое число в соответствующий символ.
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="answer3">Введите ключ к заданию 4:</label>
+                <input type="text" id="answer3" placeholder="KEY_...">
+                <button class="btn" onclick="checkAnswer(3)">[ ПРОВЕРИТЬ ]</button>
+                <div class="message" id="message3"></div>
+            </div>
+        </div>
+        
+        <!-- Задание 4 -->
+        <div class="task-container hidden" id="task4">
+            <div class="task-header">
+                <span class="task-number">ЗАДАНИЕ 4/5</span>
+                <span class="task-status" id="status4">[ ЗАБЛОКИРОВАНО ]</span>
+            </div>
+            <div class="task-description">
+                <p>&gt; Доступ получен к заданию 4...</p>
+                <p>&gt; Обнаружено сообщение, закодированное комбинацией техник.</p>
+                <div class="terminal" id="task-content4">
+                    <pre id="task-text4" style="white-space: pre-wrap; font-family: 'Share Tech Mono', monospace;"></pre>
+                </div>
+                <div class="hint">
+                    Подсказка: Сообщение было закодировано в два этапа. Сначала перевернули строку, затем сдвинули каждый символ.
+                    Для расшифровки выполните операции в обратном порядке: сначала сдвиг назад, потом переворот.
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="answer4">Введите ключ к заданию 5:</label>
+                <input type="text" id="answer4" placeholder="KEY_...">
+                <button class="btn" onclick="checkAnswer(4)">[ ПРОВЕРИТЬ ]</button>
+                <div class="message" id="message4"></div>
+            </div>
+        </div>
+        
+        <!-- Задание 5 -->
+        <div class="task-container hidden" id="task5">
+            <div class="task-header">
+                <span class="task-number">ЗАДАНИЕ 5/5 [ ФИНАЛ ]</span>
+                <span class="task-status" id="status5">[ ЗАБЛОКИРОВАНО ]</span>
+            </div>
+            <div class="task-description">
+                <p>&gt; ФИНАЛЬНОЕ ЗАДАНИЕ</p>
+                <p>&gt; Флаг закодирован комбинацией всех изученных техник.</p>
+                <div class="terminal" id="task-content5">
+                    <pre id="task-text5" style="white-space: pre-wrap; font-family: 'Share Tech Mono', monospace;"></pre>
+                </div>
+                <div class="hint">
+                    Подсказка: Используйте все изученные техники: ASCII коды, сдвиг символов, переворот строки.
+                    Выполните операции в обратном порядке: ASCII → сдвиг назад → переворот.
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="answer5">Введите флаг (формат: FLAG{...}):</label>
+                <input type="text" id="answer5" placeholder="FLAG{...}">
+                <button class="btn" onclick="checkAnswer(5)">[ ПРОВЕРИТЬ ФЛАГ ]</button>
+                <div class="message" id="message5"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="challenges.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
+
