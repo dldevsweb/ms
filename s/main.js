@@ -61,7 +61,15 @@ function checkAnswer(taskNumber) {
     message.className = 'message';
     message.textContent = '';
     
-    if (answer === correctAnswer) {
+    // Для первого задания проверка нечувствительна к регистру
+    let isCorrect = false;
+    if (taskNumber === 1) {
+        isCorrect = answer.toUpperCase() === correctAnswer.toUpperCase();
+    } else {
+        isCorrect = answer === correctAnswer;
+    }
+    
+    if (isCorrect) {
         // Правильный ответ
         message.className = 'message success';
         message.textContent = `✓ ПРАВИЛЬНО! Доступ к заданию ${taskNumber + 1} открыт...`;
