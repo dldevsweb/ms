@@ -2,178 +2,751 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>H@ck Lab • Инфозадачи</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кибербезопасность: Пароли и Взлом</title>
     <style>
-        :root {
-            color-scheme: dark;
-            --bg: #050505;
-            --panel: rgba(5, 20, 5, 0.8);
-            --accent: #39ff14;
-            --muted: #8aff6c;
-            --warning: #ff3b3b;
-        }
-
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #00ff00;
             min-height: 100vh;
-            font-family: "Fira Code", "Source Code Pro", Consolas, monospace;
-            background: radial-gradient(circle at top, #0a0f0d 0%, #000 55%);
-            color: var(--accent);
-            padding: 40px 20px;
-            letter-spacing: 0.03em;
-        }
-
-        .scanlines {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            background-image: repeating-linear-gradient(
-                    0deg,
-                    rgba(0, 0, 0, 0.7),
-                    rgba(0, 0, 0, 0.7) 1px,
-                    transparent 1px,
-                    transparent 3px
-            );
-            opacity: 0.25;
-            z-index: 1;
+            padding: 20px;
+            line-height: 1.6;
         }
 
         .container {
-            position: relative;
-            z-index: 2;
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
-            background: var(--panel);
-            border: 1px solid rgba(57, 255, 20, 0.3);
-            border-radius: 16px;
-            padding: 32px;
-            box-shadow: 0 0 30px rgba(57, 255, 20, 0.25);
         }
 
         header {
             text-align: center;
-            margin-bottom: 32px;
+            padding: 30px 0;
+            border-bottom: 2px solid #00ff00;
+            margin-bottom: 40px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00; }
+            to { text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00, 0 0 40px #00ff00; }
         }
 
         h1 {
-            font-size: 2.6rem;
-            text-transform: uppercase;
-            margin-bottom: 12px;
+            font-size: 2.5em;
+            color: #00ff00;
+            margin-bottom: 10px;
         }
 
         .subtitle {
-            color: var(--muted);
-            font-style: italic;
-            font-size: 1rem;
+            color: #00ff88;
+            font-size: 1.2em;
         }
 
-        section {
-            margin-bottom: 32px;
-            padding: 24px;
-            border-radius: 12px;
-            background: rgba(0, 10, 0, 0.8);
-            border: 1px solid rgba(57, 255, 20, 0.2);
+        .section {
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #00ff00;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
         }
 
         h2 {
-            font-size: 1.4rem;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            color: var(--muted);
+            color: #00ff88;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-left: 4px solid #00ff00;
+            padding-left: 15px;
         }
 
-        p, li {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: #d0ffd0;
+        h3 {
+            color: #00ff00;
+            margin: 20px 0 10px 0;
         }
 
-        .formula {
-            margin: 16px 0;
-            padding: 14px 16px;
-            background: rgba(5, 30, 5, 0.9);
-            border-left: 4px solid var(--accent);
-            font-size: 0.95rem;
+        .example-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff00;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
         }
 
-        .highlight {
-            color: var(--warning);
+        .bad-password {
+            color: #ff4444;
+        }
+
+        .good-password {
+            color: #44ff44;
+        }
+
+        .task {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff4444;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .task h3 {
+            color: #ff6666;
+        }
+
+        input[type="text"], input[type="password"], textarea {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #00cc00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.7);
+            transform: scale(1.05);
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
             font-weight: bold;
         }
 
-        .answer {
-            margin-top: 12px;
-            padding: 12px 16px;
-            border: 1px dashed rgba(57, 255, 20, 0.4);
+        .success {
+            background: rgba(0, 255, 0, 0.2);
+            border: 2px solid #00ff00;
+            color: #00ff00;
+        }
+
+        .error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid #ff4444;
+            color: #ff4444;
+        }
+
+        .info {
+            background: rgba(0, 150, 255, 0.2);
+            border: 2px solid #0099ff;
+            color: #0099ff;
+        }
+
+        .password-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .password-list li {
+            padding: 8px;
+            margin: 5px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid #00ff00;
+            padding-left: 15px;
+        }
+
+        .strength-meter {
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff00;
             border-radius: 10px;
-            color: #ffffff;
-            background: rgba(57, 255, 20, 0.08);
+            margin: 10px 0;
+            overflow: hidden;
         }
 
-        footer {
+        .strength-fill {
+            height: 100%;
+            transition: width 0.3s, background 0.3s;
+            border-radius: 10px;
+        }
+
+        .weak { background: #ff4444; width: 25%; }
+        .medium { background: #ffaa00; width: 50%; }
+        .strong { background: #44ff44; width: 75%; }
+        .very-strong { background: #00ff00; width: 100%; }
+
+        .hack-animation {
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+            white-space: pre;
+            overflow: hidden;
+            border: 1px solid #00ff00;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            padding: 15px;
+            border-radius: 5px;
             text-align: center;
-            color: #7cff8a;
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(57, 255, 20, 0.2);
-            padding-top: 20px;
         }
 
-        .cursor {
-            display: inline-block;
-            width: 8px;
-            background: var(--accent);
-            animation: blink 0.8s steps(1) infinite;
-            height: 1.1em;
-            vertical-align: middle;
+        .stat-number {
+            font-size: 2em;
+            color: #00ff00;
+            font-weight: bold;
         }
 
-        @keyframes blink {
-            50% {
-                opacity: 0;
-            }
+        code {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #00ff88;
+        }
+
+        .warning {
+            background: rgba(255, 200, 0, 0.1);
+            border: 2px solid #ffcc00;
+            color: #ffcc00;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
         }
     </style>
 </head>
 <body>
-    <div class="scanlines"></div>
     <div class="container">
         <header>
-            <h1>HackSchool Terminal</h1>
+            <h1>🔐 ПАРОЛИ И КИБЕРБЕЗОПАСНОСТЬ</h1>
+            <p class="subtitle">Лаборатория взлома и защиты</p>
         </header>
 
-        <section id="task1">
-            <h2>Задача 1 · Размер сообщения</h2>
-            <p>Сообщение набрано алфавитом из <span class="highlight">64 символов</span> и содержит <span class="highlight">100 символов</span>. Определи объём информации в байтах.</p>
+        <!-- Теория -->
+        <section class="section">
+            <h2>📚 ТЕОРИЯ: Типы атак на пароли</h2>
+            
+            <h3>1. Брутфорс (Brute Force)</h3>
+            <div class="example-box">
+                <strong>Принцип:</strong> Перебор всех возможных комбинаций символов<br>
+                <strong>Время взлома:</strong> Зависит от длины и сложности пароля<br>
+                <strong>Пример:</strong> Пароль "1234" взламывается за секунды, "P@ssw0rd!" - за часы
+            </div>
 
-            <div class="answer">
+            <h3>2. Словарная атака (Dictionary Attack)</h3>
+            <div class="example-box">
+                <strong>Принцип:</strong> Перебор слов из словаря и их вариаций<br>
+                <strong>Популярные словари:</strong> rockyou.txt (14 млн паролей), common passwords<br>
+                <strong>Примеры слабых паролей:</strong> password, 123456, qwerty, admin, iloveyou
+            </div>
 
+            <h3>3. Rainbow Tables</h3>
+            <div class="example-box">
+                <strong>Принцип:</strong> Предвычисленные хеши для быстрого поиска<br>
+                <strong>Защита:</strong> Использование "соли" (salt) при хешировании
+            </div>
+
+            <h3>4. Социальная инженерия</h3>
+            <div class="example-box">
+                <strong>Принцип:</strong> Угадывание пароля на основе личной информации<br>
+                <strong>Примеры:</strong> Дата рождения, имя питомца, название улицы
             </div>
         </section>
 
-        <section id="task2">
-            <h2>Задача 2 · Мощность алфавита</h2>
-            <p>Сообщение объёмом <span class="highlight">2 Кбайт (2048 байт)</span> содержит <span class="highlight">2048 символов</span>. Какова мощность алфавита?</p>
+        <!-- Примеры слабых паролей -->
+        <section class="section">
+            <h2>⚠️ ПРИМЕРЫ СЛАБЫХ ПАРОЛЕЙ</h2>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-number">123456</div>
+                    <div>Взлом: &lt;1 сек</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">password</div>
+                    <div>Взлом: &lt;1 сек</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">qwerty</div>
+                    <div>Взлом: &lt;1 сек</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">admin</div>
+                    <div>Взлом: &lt;1 сек</div>
+                </div>
+            </div>
 
-            <div class="answer">
+            <h3>Топ-10 самых слабых паролей 2024:</h3>
+            <ul class="password-list">
+                <li class="bad-password">1. 123456 (взломано 23 млн раз)</li>
+                <li class="bad-password">2. password (взломано 3.6 млн раз)</li>
+                <li class="bad-password">3. 123456789 (взломано 3.2 млн раз)</li>
+                <li class="bad-password">4. 12345678 (взломано 2.9 млн раз)</li>
+                <li class="bad-password">5. qwerty (взломано 2.5 млн раз)</li>
+                <li class="bad-password">6. abc123 (взломано 2.1 млн раз)</li>
+                <li class="bad-password">7. password1 (взломано 1.9 млн раз)</li>
+                <li class="bad-password">8. 12345 (взломано 1.8 млн раз)</li>
+                <li class="bad-password">9. 1234567 (взломано 1.7 млн раз)</li>
+                <li class="bad-password">10. welcome (взломано 1.6 млн раз)</li>
+            </ul>
+
+            <div class="warning">
+                <strong>⚠️ ВНИМАНИЕ:</strong> Эти пароли взламываются мгновенно даже простыми скриптами!
             </div>
         </section>
 
-        <section id="task3">
-            <h2>Задача 3 · Объём текста</h2>
-            <p>Используется <span class="highlight">128-символьный</span> алфавит. На странице <span class="highlight">40 строк × 60 символов</span>. Сколько Кбайт займут <span class="highlight">5 страниц</span>?</p>
-
-            <div class="answer">
+        <!-- Задание 1: Анализатор силы пароля -->
+        <section class="section">
+            <div class="task">
+                <h2>🎯 ЗАДАНИЕ 1: Анализатор силы пароля</h2>
+                <p>Проверь, насколько сильный твой пароль. Введи пароль и узнай его уязвимости.</p>
+                
+                <input type="password" id="passwordInput" placeholder="Введите пароль для анализа..." oninput="analyzePassword()">
+                
+                <div id="strengthResult"></div>
+                <div id="strengthMeter" class="strength-meter" style="display: none;">
+                    <div id="strengthFill" class="strength-fill"></div>
+                </div>
+                <div id="passwordAnalysis"></div>
             </div>
         </section>
 
+        <!-- Задание 2: Взлом слабого пароля -->
+        <section class="section">
+            <div class="task">
+                <h2>💀 ЗАДАНИЕ 2: Симулятор брутфорса</h2>
+                <p>Попробуй взломать слабый пароль методом брутфорса. У тебя есть ограниченное время!</p>
+                
+                <p><strong>Цель:</strong> Взломать пароль из 4 цифр (0000-9999)</p>
+                <button onclick="startBruteForce()">🚀 НАЧАТЬ ВЗЛОМ</button>
+                <button onclick="stopBruteForce()">⏹ ОСТАНОВИТЬ</button>
+                
+                <div id="bruteForceOutput" class="hack-animation" style="display: none;"></div>
+                <div id="bruteForceResult"></div>
+            </div>
+        </section>
 
+        <!-- Задание 3: Словарная атака -->
+        <section class="section">
+            <div class="task">
+                <h2>📖 ЗАДАНИЕ 3: Словарная атака</h2>
+                <p>Попробуй взломать пароль, используя популярный словарь паролей.</p>
+                
+                <p><strong>Правила:</strong> Выбери пароль из списка или введи свой. Система попытается его взломать.</p>
+                
+                <select id="targetPassword" style="background: rgba(0,0,0,0.7); color: #00ff00; padding: 10px; border: 2px solid #00ff00; border-radius: 5px; width: 100%; margin: 10px 0; font-family: 'Courier New', monospace;">
+                    <option value="password">password</option>
+                    <option value="admin">admin</option>
+                    <option value="123456">123456</option>
+                    <option value="qwerty">qwerty</option>
+                    <option value="welcome">welcome</option>
+                    <option value="custom">Свой пароль...</option>
+                </select>
+                
+                <input type="text" id="customPassword" placeholder="Или введи свой пароль..." style="display: none;">
+                
+                <button onclick="startDictionaryAttack()">🔓 НАЧАТЬ СЛОВАРНУЮ АТАКУ</button>
+                
+                <div id="dictionaryOutput" class="hack-animation" style="display: none;"></div>
+                <div id="dictionaryResult"></div>
+            </div>
+        </section>
+
+        <!-- Задание 4: Генератор сильных паролей -->
+        <section class="section">
+            <h2>🛡️ ЗАДАНИЕ 4: Генератор сильных паролей</h2>
+            <p>Создай безопасный пароль для защиты от атак.</p>
+            
+            <label>
+                <input type="checkbox" id="useUppercase" checked> Заглавные буквы (A-Z)
+            </label><br>
+            <label>
+                <input type="checkbox" id="useLowercase" checked> Строчные буквы (a-z)
+            </label><br>
+            <label>
+                <input type="checkbox" id="useNumbers" checked> Цифры (0-9)
+            </label><br>
+            <label>
+                <input type="checkbox" id="useSymbols" checked> Символы (!@#$%^&*)
+            </label><br><br>
+            
+            <label>Длина пароля: <input type="number" id="passwordLength" value="16" min="8" max="64" style="width: 80px; background: rgba(0,0,0,0.7); color: #00ff00; border: 2px solid #00ff00; padding: 5px; border-radius: 3px;"></label><br><br>
+            
+            <button onclick="generatePassword()">✨ СГЕНЕРИРОВАТЬ ПАРОЛЬ</button>
+            
+            <div id="generatedPassword" style="margin-top: 20px;"></div>
+            <button onclick="copyPassword()" id="copyBtn" style="display: none;">📋 КОПИРОВАТЬ</button>
+        </section>
+
+        <!-- Задание 5: Анализ утечек -->
+        <section class="section">
+            <div class="task">
+                <h2>🔍 ЗАДАНИЕ 5: Проверка на утечки</h2>
+                <p>Проверь, не был ли твой пароль скомпрометирован в известных утечках данных.</p>
+                <p><em>Примечание: Это симуляция. Реальная проверка требует подключения к базам данных утечек.</em></p>
+                
+                <input type="password" id="leakCheckInput" placeholder="Введите пароль для проверки...">
+                <button onclick="checkLeak()">🔎 ПРОВЕРИТЬ</button>
+                
+                <div id="leakResult"></div>
+            </div>
+        </section>
+
+        <!-- Рекомендации -->
+        <section class="section">
+            <h2>✅ РЕКОМЕНДАЦИИ ПО БЕЗОПАСНОСТИ</h2>
+            
+            <h3>Правила создания сильного пароля:</h3>
+            <ul class="password-list">
+                <li class="good-password">✅ Минимум 12 символов (лучше 16+)</li>
+                <li class="good-password">✅ Используй буквы (заглавные и строчные), цифры и символы</li>
+                <li class="good-password">✅ Избегай личной информации (имя, дата рождения)</li>
+                <li class="good-password">✅ Не используй слова из словаря</li>
+                <li class="good-password">✅ Используй уникальный пароль для каждого аккаунта</li>
+                <li class="good-password">✅ Рассмотри использование менеджера паролей</li>
+                <li class="good-password">✅ Включи двухфакторную аутентификацию (2FA)</li>
+            </ul>
+
+            <h3>Методы создания запоминающихся паролей:</h3>
+            <div class="example-box">
+                <strong>Метод фразы:</strong> "МойКотЛюбитРыбу2024!" → "МкЛр2024!"<br>
+                <strong>Метод замены:</strong> "password" → "P@ssw0rd!"<br>
+                <strong>Метод акронима:</strong> "Я люблю программировать на Python" → "ЯлпнPyth0n!"
+            </div>
+        </section>
     </div>
+
+    <script>
+        // Словарь популярных паролей
+        const commonPasswords = [
+            'password', '123456', '123456789', '12345678', '12345',
+            'qwerty', 'abc123', 'password1', '1234567', 'welcome',
+            'admin', 'letmein', 'monkey', '1234567890', 'dragon',
+            'master', 'sunshine', 'princess', 'football', 'shadow',
+            'superman', 'qwerty123', 'michael', 'jennifer', 'hunter',
+            'trustno1', 'batman', 'thomas', 'tigger', 'robert'
+        ];
+
+        let bruteForceInterval = null;
+        let dictionaryInterval = null;
+
+        // Задание 1: Анализатор пароля
+        function analyzePassword() {
+            const password = document.getElementById('passwordInput').value;
+            const resultDiv = document.getElementById('strengthResult');
+            const meterDiv = document.getElementById('strengthMeter');
+            const fillDiv = document.getElementById('strengthFill');
+            const analysisDiv = document.getElementById('passwordAnalysis');
+
+            if (!password) {
+                resultDiv.innerHTML = '';
+                meterDiv.style.display = 'none';
+                analysisDiv.innerHTML = '';
+                return;
+            }
+
+            let score = 0;
+            let feedback = [];
+
+            // Проверки
+            if (password.length >= 12) score += 2;
+            else if (password.length >= 8) score += 1;
+            else feedback.push('❌ Слишком короткий (минимум 8 символов)');
+
+            if (/[a-z]/.test(password)) score += 1;
+            else feedback.push('❌ Нет строчных букв');
+
+            if (/[A-Z]/.test(password)) score += 1;
+            else feedback.push('❌ Нет заглавных букв');
+
+            if (/[0-9]/.test(password)) score += 1;
+            else feedback.push('❌ Нет цифр');
+
+            if (/[^a-zA-Z0-9]/.test(password)) score += 1;
+            else feedback.push('❌ Нет специальных символов');
+
+            if (commonPasswords.includes(password.toLowerCase())) {
+                score = 0;
+                feedback.push('❌ Пароль в списке самых слабых!');
+            }
+
+            if (password.length < 8) {
+                feedback.push('❌ Слишком короткий');
+            }
+
+            // Время взлома
+            let crackTime = '';
+            if (score <= 1) {
+                crackTime = 'Мгновенно (< 1 секунды)';
+            } else if (score <= 2) {
+                crackTime = 'Несколько секунд';
+            } else if (score <= 3) {
+                crackTime = 'Несколько минут';
+            } else if (score <= 4) {
+                crackTime = 'Несколько часов';
+            } else {
+                crackTime = 'Годы или десятилетия';
+            }
+
+            // Отображение результата
+            meterDiv.style.display = 'block';
+            fillDiv.className = 'strength-fill';
+            
+            let strength = '';
+            if (score <= 1) {
+                strength = 'ОЧЕНЬ СЛАБЫЙ';
+                fillDiv.classList.add('weak');
+            } else if (score <= 2) {
+                strength = 'СЛАБЫЙ';
+                fillDiv.classList.add('weak');
+            } else if (score <= 3) {
+                strength = 'СРЕДНИЙ';
+                fillDiv.classList.add('medium');
+            } else if (score <= 4) {
+                strength = 'СИЛЬНЫЙ';
+                fillDiv.classList.add('strong');
+            } else {
+                strength = 'ОЧЕНЬ СИЛЬНЫЙ';
+                fillDiv.classList.add('very-strong');
+            }
+
+            resultDiv.innerHTML = `<div class="result ${score <= 2 ? 'error' : score <= 3 ? 'info' : 'success'}">
+                <strong>Сила пароля: ${strength}</strong><br>
+                Оценка: ${score}/5<br>
+                Время взлома брутфорсом: ${crackTime}
+            </div>`;
+
+            analysisDiv.innerHTML = feedback.length > 0 ? 
+                `<div class="result error"><strong>Рекомендации:</strong><ul style="margin-top: 10px; padding-left: 20px;">${feedback.map(f => `<li>${f}</li>`).join('')}</ul></div>` :
+                `<div class="result success">✅ Пароль соответствует основным требованиям безопасности!</div>`;
+        }
+
+        // Задание 2: Брутфорс
+        function startBruteForce() {
+            const target = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            const output = document.getElementById('bruteForceOutput');
+            const result = document.getElementById('bruteForceResult');
+            
+            output.style.display = 'block';
+            output.textContent = `[INFO] Начало брутфорс-атаки...\n[INFO] Цель: ${target}\n[INFO] Диапазон: 0000-9999\n\n`;
+            result.innerHTML = '';
+
+            let attempts = 0;
+            const startTime = Date.now();
+
+            bruteForceInterval = setInterval(() => {
+                attempts++;
+                const guess = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+                
+                output.textContent += `[ATTEMPT ${attempts}] Пробую: ${guess}\n`;
+                output.scrollTop = output.scrollHeight;
+
+                if (guess === target) {
+                    clearInterval(bruteForceInterval);
+                    const time = ((Date.now() - startTime) / 1000).toFixed(2);
+                    output.textContent += `\n[SUCCESS] Пароль взломан: ${target}\n`;
+                    output.textContent += `[STATS] Попыток: ${attempts}\n`;
+                    output.textContent += `[STATS] Время: ${time} секунд\n`;
+                    
+                    result.innerHTML = `<div class="result success">
+                        <strong>🎉 УСПЕХ!</strong><br>
+                        Пароль взломан: <code>${target}</code><br>
+                        Попыток: ${attempts}<br>
+                        Время: ${time} секунд
+                    </div>`;
+                } else if (attempts >= 10000) {
+                    clearInterval(bruteForceInterval);
+                    result.innerHTML = `<div class="result error">Превышен лимит попыток (10000)</div>`;
+                }
+            }, 10);
+        }
+
+        function stopBruteForce() {
+            if (bruteForceInterval) {
+                clearInterval(bruteForceInterval);
+                bruteForceInterval = null;
+            }
+        }
+
+        // Задание 3: Словарная атака
+        function startDictionaryAttack() {
+            const select = document.getElementById('targetPassword');
+            const customInput = document.getElementById('customPassword');
+            let target = '';
+
+            if (select.value === 'custom') {
+                target = customInput.value.toLowerCase();
+                if (!target) {
+                    alert('Введите пароль для взлома!');
+                    return;
+                }
+            } else {
+                target = select.value.toLowerCase();
+            }
+
+            const output = document.getElementById('dictionaryOutput');
+            const result = document.getElementById('dictionaryResult');
+            
+            output.style.display = 'block';
+            output.textContent = `[INFO] Начало словарной атаки...\n[INFO] Словарь: ${commonPasswords.length} паролей\n[INFO] Цель: [СКРЫТО]\n\n`;
+            result.innerHTML = '';
+
+            let index = 0;
+            const startTime = Date.now();
+
+            dictionaryInterval = setInterval(() => {
+                if (index >= commonPasswords.length) {
+                    clearInterval(dictionaryInterval);
+                    result.innerHTML = `<div class="result error">
+                        <strong>❌ ПРОВАЛ</strong><br>
+                        Пароль не найден в словаре. Возможно, он достаточно сильный.
+                    </div>`;
+                    return;
+                }
+
+                const guess = commonPasswords[index];
+                output.textContent += `[ATTEMPT ${index + 1}] Проверяю: ${guess}\n`;
+                output.scrollTop = output.scrollHeight;
+
+                if (guess === target) {
+                    clearInterval(dictionaryInterval);
+                    const time = ((Date.now() - startTime) / 1000).toFixed(2);
+                    output.textContent += `\n[SUCCESS] Пароль найден: ${guess}\n`;
+                    output.textContent += `[STATS] Попыток: ${index + 1}\n`;
+                    output.textContent += `[STATS] Время: ${time} секунд\n`;
+                    
+                    result.innerHTML = `<div class="result success">
+                        <strong>💀 ВЗЛОМАН!</strong><br>
+                        Пароль: <code>${guess}</code><br>
+                        Попыток: ${index + 1}<br>
+                        Время: ${time} секунд<br><br>
+                        <strong>Вывод:</strong> Этот пароль слишком слабый и находится в топе популярных паролей!
+                    </div>`;
+                }
+
+                index++;
+            }, 200);
+        }
+
+        // Обработка выбора пароля
+        document.getElementById('targetPassword').addEventListener('change', function() {
+            const customInput = document.getElementById('customPassword');
+            if (this.value === 'custom') {
+                customInput.style.display = 'block';
+            } else {
+                customInput.style.display = 'none';
+            }
+        });
+
+        // Задание 4: Генератор паролей
+        function generatePassword() {
+            const length = parseInt(document.getElementById('passwordLength').value);
+            const useUpper = document.getElementById('useUppercase').checked;
+            const useLower = document.getElementById('useLowercase').checked;
+            const useNum = document.getElementById('useNumbers').checked;
+            const useSym = document.getElementById('useSymbols').checked;
+
+            let charset = '';
+            if (useUpper) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            if (useLower) charset += 'abcdefghijklmnopqrstuvwxyz';
+            if (useNum) charset += '0123456789';
+            if (useSym) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+            if (!charset) {
+                alert('Выберите хотя бы один тип символов!');
+                return;
+            }
+
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+
+            const resultDiv = document.getElementById('generatedPassword');
+            const copyBtn = document.getElementById('copyBtn');
+            
+            resultDiv.innerHTML = `<div class="result success">
+                <strong>✨ Сгенерированный пароль:</strong><br>
+                <code style="font-size: 1.5em; letter-spacing: 2px; display: block; margin: 10px 0; padding: 15px; background: rgba(0,0,0,0.5); border: 2px solid #00ff00; border-radius: 5px;">${password}</code>
+            </div>`;
+            
+            copyBtn.style.display = 'inline-block';
+            copyBtn.onclick = () => {
+                navigator.clipboard.writeText(password).then(() => {
+                    copyBtn.textContent = '✅ СКОПИРОВАНО!';
+                    setTimeout(() => {
+                        copyBtn.textContent = '📋 КОПИРОВАТЬ';
+                    }, 2000);
+                });
+            };
+        }
+
+        // Задание 5: Проверка утечек
+        function checkLeak() {
+            const password = document.getElementById('leakCheckInput').value;
+            const resultDiv = document.getElementById('leakResult');
+
+            if (!password) {
+                resultDiv.innerHTML = '<div class="result error">Введите пароль для проверки!</div>';
+                return;
+            }
+
+            // Симуляция проверки
+            const isLeaked = commonPasswords.includes(password.toLowerCase()) || 
+                           password.length < 8 ||
+                           /^[0-9]+$/.test(password);
+
+            if (isLeaked) {
+                resultDiv.innerHTML = `<div class="result error">
+                    <strong>⚠️ ОБНАРУЖЕНА УТЕЧКА!</strong><br><br>
+                    Этот пароль был найден в базах данных утечек:<br>
+                    • RockYou (2009) - 14 млн паролей<br>
+                    • LinkedIn (2012) - 164 млн аккаунтов<br>
+                    • Adobe (2013) - 153 млн записей<br><br>
+                    <strong>Рекомендация:</strong> Немедленно смените этот пароль на более сильный!
+                </div>`;
+            } else {
+                resultDiv.innerHTML = `<div class="result success">
+                    <strong>✅ ПАРОЛЬ НЕ НАЙДЕН В УТЕЧКАХ</strong><br><br>
+                    Этот пароль не обнаружен в известных базах данных утечек.<br>
+                    Однако это не гарантирует его безопасность. Убедитесь, что:<br>
+                    • Пароль достаточно длинный (12+ символов)<br>
+                    • Используется только для одного аккаунта<br>
+                    • Включена двухфакторная аутентификация
+                </div>`;
+            }
+        }
+    </script>
 </body>
 </html>
-
-
