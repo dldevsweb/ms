@@ -296,6 +296,50 @@
             color: #00ffcc;
             margin-top: 8px;
         }
+
+        .missions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .mission-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(0, 150, 255, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 150, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mission-card h3 {
+            color: #66d9ff;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+
+        .radio-option input {
+            width: auto;
+        }
+
+        .mission-card button {
+            align-self: flex-start;
+            background: #0099ff;
+            color: #fff;
+        }
+
+        .mission-card button:hover {
+            background: #00ccff;
+        }
     </style>
 </head>
 <body>
@@ -515,7 +559,41 @@
                 </div>
             </div>
 
-            <p class="case-tip">Лайфхак: придумай короткий стишок или историю, чтобы запомнить длинный пароль, но не произноси его в присутствии других людей.</p>
+            
+        </section>
+
+        <!-- Мини-миссии -->
+        <section class="section">
+            <h2>🎮 ЕЩЁ 3 МИССИИ</h2>
+            <p>Быстрые задания, чтобы закрепить знания. Попробуй пройти их все!</p>
+
+            <div class="missions-grid">
+                <div class="mission-card">
+                    <h3>Миссия 1. Найди лучший пароль</h3>
+                    <p>Какой пароль подойдёт для почты школьного кружка?</p>
+                    <label class="radio-option"><input type="radio" name="mission1" value="A"> puppy2020</label>
+                    <label class="radio-option"><input type="radio" name="mission1" value="B"> 12345678</label>
+                    <label class="radio-option"><input type="radio" name="mission1" value="C"> S#tarFox2025!</label>
+                    <button onclick="checkMissionChoice()">ПРОВЕРИТЬ</button>
+                    <div id="missionResult1" class="case-result"></div>
+                </div>
+
+                <div class="mission-card">
+                    <h3>Миссия 2. Усиль пароль</h3>
+                    <p>Есть слабый пароль <code>masha2009</code>. Придумай более сильную версию и напиши её ниже.</p>
+                    <input type="text" id="mission2Input" placeholder="Например: M@shaSky2009!">
+                    <button onclick="checkMissionUpgrade()">ПРОВЕРИТЬ</button>
+                    <div id="missionResult2" class="case-result"></div>
+                </div>
+
+                <div class="mission-card">
+                    <h3>Миссия 3. Расшифруй код</h3>
+                    <p>Возьми первые буквы слов <strong>Mega Alien Robot Dragon</strong>, добавь число <strong>2030</strong> и поставь в конце <strong>!</strong>.</p>
+                    <input type="text" id="mission3Input" placeholder="Введите ответ...">
+                    <button onclick="checkMissionCode()">ПРОВЕРИТЬ</button>
+                    <div id="missionResult3" class="case-result"></div>
+                </div>
+            </div>
         </section>
 
         <!-- Рекомендации -->
@@ -839,6 +917,81 @@
                     • Пароль достаточно длинный (12+ символов)<br>
                     • Используется только для одного аккаунта<br>
                     • Включена двухфакторная аутентификация
+                </div>`;
+            }
+        }
+
+        // Мини-миссии
+        function checkMissionChoice() {
+            const resultDiv = document.getElementById('missionResult1');
+            const selected = document.querySelector('input[name="mission1"]:checked');
+
+            if (!selected) {
+                resultDiv.innerHTML = '<div class="result error">Выбери вариант ответа!</div>';
+                return;
+            }
+
+            if (selected.value === 'C') {
+                resultDiv.innerHTML = `<div class="result success">
+                    <strong>✅ Отлично!</strong><br>
+                    В пароле есть заглавные буквы, символ и цифры — ломать такой намного сложнее.
+                </div>`;
+            } else {
+                resultDiv.innerHTML = `<div class="result error">
+                    <strong>⚠️ Неправильно.</strong><br>
+                    Попробуй выбрать пароль, в котором есть разные виды символов и длина больше 8.
+                </div>`;
+            }
+        }
+
+        function checkMissionUpgrade() {
+            const input = document.getElementById('mission2Input').value.trim();
+            const resultDiv = document.getElementById('missionResult2');
+
+            if (!input) {
+                resultDiv.innerHTML = '<div class="result error">Сначала придумай новый пароль!</div>';
+                return;
+            }
+
+            const issues = [];
+            if (input.length < 12) issues.push('Пароль должен быть от 12 символов');
+            if (!/[A-Z]/.test(input)) issues.push('Добавь заглавную букву');
+            if (!/[a-z]/.test(input)) issues.push('Добавь строчную букву');
+            if (!/[0-9]/.test(input)) issues.push('Добавь цифру');
+            if (!/[^a-zA-Z0-9]/.test(input)) issues.push('Добавь спецсимвол');
+            if (/masha2009/i.test(input)) issues.push('Пароль не должен повторять исходный вариант');
+
+            if (issues.length) {
+                resultDiv.innerHTML = `<div class="result error">
+                    <strong>⚠️ Ещё не идеально:</strong>
+                    <ul style="margin-top:10px; padding-left:20px;">${issues.map(item => `<li>${item}</li>`).join('')}</ul>
+                </div>`;
+            } else {
+                resultDiv.innerHTML = `<div class="result success">
+                    <strong>✅ Супер!</strong><br>
+                    Такой пароль выдержит большинство атак. Не забудь его сохранить в безопасном месте.
+                </div>`;
+            }
+        }
+
+        function checkMissionCode() {
+            const input = document.getElementById('mission3Input').value.trim();
+            const resultDiv = document.getElementById('missionResult3');
+
+            if (!input) {
+                resultDiv.innerHTML = '<div class="result error">Введи расшифрованный пароль!</div>';
+                return;
+            }
+
+            if (input.toUpperCase() === 'MARD2030!') {
+                resultDiv.innerHTML = `<div class="result success">
+                    <strong>✅ Код принят!</strong><br>
+                    Ты правильно собрал подсказку: M + A + R + D + 2030 + !.
+                </div>`;
+            } else {
+                resultDiv.innerHTML = `<div class="result error">
+                    <strong>❌ Неверно.</strong><br>
+                    Проверь, правильно ли взял первые буквы слов и добавил 2030!.
                 </div>`;
             }
         }
