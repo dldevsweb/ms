@@ -853,15 +853,16 @@
             const result = document.getElementById('bruteForceResult');
             
             output.style.display = 'block';
-            output.textContent = `[INFO] Начало брутфорс-атаки...\n[INFO] Цель: ${target}\n[INFO] Диапазон: 0000-9999\n\n`;
+            output.textContent = `[INFO] Начало брутфорс-атаки...\n[INFO] Цель: ${target}\n[INFO] Диапазон: 0000-9999 (последовательный перебор)\n\n`;
             result.innerHTML = '';
 
             let attempts = 0;
+            let current = 0;
             const startTime = Date.now();
 
             bruteForceInterval = setInterval(() => {
                 attempts++;
-                const guess = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+                const guess = current.toString().padStart(4, '0');
                 
                 output.textContent += `[ATTEMPT ${attempts}] Пробую: ${guess}\n`;
                 output.scrollTop = output.scrollHeight;
@@ -879,10 +880,11 @@
                         Попыток: ${attempts}<br>
                         Время: ${time} секунд
                     </div>`;
-                } else if (attempts >= 10000) {
+                } else if (attempts >= 10000 || current >= 9999) {
                     clearInterval(bruteForceInterval);
                     result.innerHTML = `<div class="result error">Превышен лимит попыток (10000)</div>`;
                 }
+                current++;
             }, 10);
         }
 
