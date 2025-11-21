@@ -498,7 +498,10 @@
                 <h2>💀 ЗАДАНИЕ 2: Симулятор брутфорса</h2>
                 <p>Попробуй взломать слабый пароль методом брутфорса. У тебя есть ограниченное время!</p>
                 
-                <p><strong>Цель:</strong> Взломать пароль из 4 цифр (0000-9999)</p>
+                <p><strong>Цель:</strong> Взломать пароль из 4 цифр (0000-9999).</p>
+                <input type="text" id="bruteForceTarget" maxlength="4"
+                       placeholder="Необязательно: задай свой пароль (например, 0001)"
+                       style="max-width: 260px; display:block; margin:10px 0;">
                 <button onclick="startBruteForce()">🚀 НАЧАТЬ ВЗЛОМ</button>
                 <button onclick="stopBruteForce()">⏹ ОСТАНОВИТЬ</button>
                 
@@ -848,7 +851,23 @@
 
         // Задание 2: Брутфорс
         function startBruteForce() {
-            const target = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            // Останавливаем предыдущий запуск, если он ещё идёт
+            if (bruteForceInterval) {
+                clearInterval(bruteForceInterval);
+                bruteForceInterval = null;
+            }
+
+            const manualInput = document.getElementById('bruteForceTarget')
+                ? document.getElementById('bruteForceTarget').value.trim()
+                : '';
+
+            let target;
+            if (/^\d{4}$/.test(manualInput)) {
+                target = manualInput;
+            } else {
+                target = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            }
+
             const output = document.getElementById('bruteForceOutput');
             const result = document.getElementById('bruteForceResult');
             
@@ -861,14 +880,24 @@
             const startTime = Date.now();
 
             bruteForceInterval = setInterval(() => {
-                attempts++;
+                if (current > 9999) {
+                    clearInterval(bruteForceInterval);
+                    bruteForceInterval = null;
+                    result.innerHTML = `<div class="result error">
+                        Перебраны все комбинации от 0000 до 9999, пароль не найден.
+                    </div>`;
+                    return;
+                }
+
                 const guess = current.toString().padStart(4, '0');
+                attempts++;
                 
                 output.textContent += `[ATTEMPT ${attempts}] Пробую: ${guess}\n`;
                 output.scrollTop = output.scrollHeight;
 
                 if (guess === target) {
                     clearInterval(bruteForceInterval);
+                    bruteForceInterval = null;
                     const time = ((Date.now() - startTime) / 1000).toFixed(2);
                     output.textContent += `\n[SUCCESS] Пароль взломан: ${target}\n`;
                     output.textContent += `[STATS] Попыток: ${attempts}\n`;
@@ -880,10 +909,8 @@
                         Попыток: ${attempts}<br>
                         Время: ${time} секунд
                     </div>`;
-                } else if (attempts >= 10000 || current >= 9999) {
-                    clearInterval(bruteForceInterval);
-                    result.innerHTML = `<div class="result error">Превышен лимит попыток (10000)</div>`;
                 }
+
                 current++;
             }, 10);
         }
