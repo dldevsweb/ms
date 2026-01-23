@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tron Block Explorer</title>
+    <title>Лазорин Д.С., группа КС-21-04</title>
     <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
     <style>
         * {
@@ -491,15 +491,12 @@
         let currentBlockNumber = null;
         let currentTransaction = null;
         let currentTransactionFeatures = null;
-
         async function searchTransaction() {
             const txHash = document.getElementById('txHash').value.trim();
-            
             if (!txHash) {
                 showTxError('Пожалуйста, введите хэш транзакции');
                 return;
             }
-
             const loading = document.getElementById('txLoading');
             const loadingText = document.getElementById('txLoadingText');
             const results = document.getElementById('txResults');
@@ -508,8 +505,6 @@
             const exportTxBtn = document.getElementById('exportTxBtn');
             const blockResults = document.getElementById('results');
             const blockError = document.getElementById('error');
-
-            // Скрыть предыдущие результаты (включая результаты блоков)
             results.classList.remove('show');
             error.classList.remove('show');
             blockResults.classList.remove('show');
@@ -519,13 +514,8 @@
             searchBtn.disabled = true;
             exportTxBtn.disabled = true;
             currentTransactionFeatures = null;
-
             try {
-                // Используем TronGrid API для получения транзакции
-                // Сначала wallet API (меньше 404), затем v1 как запасной
                 let tx = null;
-
-                // Вариант 1: wallet API
                 try {
                     const response = await fetch('https://api.trongrid.io/wallet/gettransactionbyid', {
                         method: 'POST',
@@ -536,7 +526,6 @@
                             value: txHash
                         })
                     });
-
                     if (response.ok) {
                         const data = await response.json();
                         if (data.txID || data.raw_data) {
@@ -546,8 +535,6 @@
                 } catch (e) {
                     console.log('wallet API failed, trying v1 API');
                 }
-
-                // Вариант 2: v1 API
                 if (!tx) {
                     try {
                         const response = await fetch(`https://api.trongrid.io/v1/transactions/${txHash}`, {
@@ -556,7 +543,6 @@
                                 'Content-Type': 'application/json',
                             }
                         });
-
                         if (response.ok) {
                             const data = await response.json();
                             if (data.data && data.data.length > 0) {
@@ -569,15 +555,11 @@
                         console.log('v1 API failed');
                     }
                 }
-
                 if (!tx) {
                     throw new Error('Транзакция не найдена. Проверьте правильность хэша.');
                 }
-
-                // Дополнительно запрашиваем подробную информацию (receipt, fee, ресурсы)
                 const txInfo = await fetchTransactionInfo(txHash);
                 if (txInfo) {
-                    // Объединяем данные: receipt, fee и ret могут находиться во втором ответе
                     tx.receipt = txInfo.receipt || tx.receipt || txInfo;
                     if (!tx.ret && txInfo.ret) {
                         tx.ret = txInfo.ret;
@@ -585,30 +567,21 @@
                     if (!tx.fee && txInfo.fee) {
                         tx.fee = txInfo.fee;
                     }
-                    // В некоторых ответах успешность лежит в result/contractResult
                     if (!tx.result && txInfo.result) {
                         tx.result = txInfo.result;
                     }
                     if (!tx.contractResult && txInfo.contractResult) {
                         tx.contractResult = txInfo.contractResult;
                     }
-                    // Логи (TRC20 события) могут подсказать, что был токен-трансфер
                     if (!tx.log && txInfo.log) {
                         tx.log = txInfo.log;
                     }
                 }
-
                 currentTransaction = tx;
-
-                // Обновляем текст загрузки
                 const loadingText = document.getElementById('txLoadingText');
                 loadingText.textContent = 'Анализ транзакции и поиск истории входов...';
-
-                // Анализируем транзакцию
                 await analyzeTransaction(tx);
-                
                 results.classList.add('show');
-
             } catch (err) {
                 showTxError('Ошибка: ' + err.message + '. Проверьте правильность хэша транзакции.');
             } finally {
@@ -616,7 +589,6 @@
                 searchBtn.disabled = false;
             }
         }
-
         async function fetchTransactionInfo(txHash) {
             try {
                 const resp = await fetch('https://api.trongrid.io/wallet/gettransactioninfobyid', {
@@ -631,18 +603,13 @@
                 return null;
             }
         }
-
         async function analyzeTransaction(tx) {
             const rawData = tx.raw_data || {};
             const contracts = rawData.contract || [];
             const receipt = tx.receipt || {};
-            
-            // 1. tx_hour - час суток отправки транзакции (0-23)
             const timestamp = rawData.timestamp || tx.block_timestamp || Date.now();
             const date = new Date(timestamp);
             const txHour = date.getUTCHours();
-
-            // 2. is_contract_call - является ли транзакция вызовом контракта (TriggerSmartContract)
             let isContractCall = 0;
             for (const contract of contracts) {
                 const contractType = contract.type || '';
@@ -651,15 +618,12 @@
                     break;
                 }
             }
-
-            // 3. bandwidth_usage - потреблённый bandwidth
             let bandwidthUsage = 0;
             if (receipt.net_usage !== undefined && receipt.net_usage !== null) {
                 bandwidthUsage = parseInt(receipt.net_usage) || 0;
             } else if (tx.net_usage !== undefined && tx.net_usage !== null) {
                 bandwidthUsage = parseInt(tx.net_usage) || 0;
             }
-            // 4. energy_usage - потреблённая энергия (если вызов контракта, иначе 0)
             let energyUsage = 0;
             if (isContractCall === 1) {
                 if (receipt.energy_usage_total !== undefined && receipt.energy_usage_total !== null) {
@@ -670,22 +634,16 @@
                     energyUsage = parseInt(tx.energy_usage) || 0;
                 }
             }
-
-            // 5. has_token_transfer - был ли в транзакции перевод TRC10/TRC20 токена
             let hasTokenTransfer = 0;
             for (const contract of contracts) {
                 const contractType = contract.type || '';
                 const value = contract.parameter?.value || {};
-                
-                // TransferAssetContract - перевод TRC10 токенов
+
                 if (contractType === 'TransferAssetContract' || contractType.includes('TransferAsset')) {
                     hasTokenTransfer = 1;
                     break;
                 }
-                
-                // TriggerSmartContract может содержать переводы TRC20 токенов
                 if (contractType === 'TriggerSmartContract' || contractType.includes('TriggerSmartContract')) {
-                    // Проверяем внутренние транзакции (internal_transactions)
                     if (tx.internal_transactions && Array.isArray(tx.internal_transactions)) {
                         for (const internalTx of tx.internal_transactions) {
                             if (internalTx.tokenInfo || internalTx.call_value === '0') {
@@ -694,11 +652,9 @@
                             }
                         }
                     }
-                    // Логи из receipt (TRC20 события)
                     if (tx.log && Array.isArray(tx.log) && tx.log.length > 0) {
                         hasTokenTransfer = 1;
                     }
-                    // Также проверяем transfers в контракте
                     if (value.transfers && Array.isArray(value.transfers) && value.transfers.length > 0) {
                         hasTokenTransfer = 1;
                         break;
@@ -707,24 +663,17 @@
                 
                 if (hasTokenTransfer === 1) break;
             }
-
-            // 6. tx_size_bytes - физический размер транзакции в байтах
             let txSizeBytes = 0;
             try {
-                // Используем размер сериализованного raw_data + подписи
                 const rawDataSize = new Blob([JSON.stringify(rawData)]).size;
                 const signaturesSize = tx.signature ? (Array.isArray(tx.signature) ? tx.signature.length * 128 : 128) : 0;
                 txSizeBytes = rawDataSize + signaturesSize;
-                
-                // Альтернатива: используем размер всей транзакции как JSON
                 if (txSizeBytes < 100) {
                     txSizeBytes = new Blob([JSON.stringify(tx)]).size;
                 }
             } catch (e) {
                 txSizeBytes = new Blob([JSON.stringify(tx)]).size;
             }
-
-            // 7. result_success - успешно ли выполнена транзакция (SUCCESS = 1)
             let resultSuccess = 0;
             const ret = tx.ret || [];
             if (ret.length > 0) {
@@ -737,22 +686,17 @@
             } else if (receipt.result === 'SUCCESS' || receipt.resMessage === 'SUCCESS' || tx.result === 'SUCCESS' || (Array.isArray(tx.contractResult) && tx.contractResult.some(r => r === 'SUCCESS'))) {
                 resultSuccess = 1;
             }
-
-            // 8. paid_fee_s - фактически уплаченная комиссия в SUN
             let paidFeeS = 0;
-            // Tron gettransactioninfobyid возвращает fee (в SUN) сразу
             if (receipt.fee !== undefined && receipt.fee !== null) {
                 paidFeeS = parseInt(receipt.fee) || 0;
             } else if (tx.fee) {
                 paidFeeS = parseInt(tx.fee) || 0;
             }
-            // Если нет общего fee, собираем из полей net_fee + energy_fee
             if (paidFeeS === 0) {
                 const netFee = receipt.net_fee ? parseInt(receipt.net_fee) || 0 : 0;
                 const energyFee = receipt.energy_fee ? parseInt(receipt.energy_fee) || 0 : 0;
                 paidFeeS = netFee + energyFee;
             }
-            // Если комиссия не найдена в ret, пробуем другие поля
             if (paidFeeS === 0 && ret.length > 0) {
                 for (const r of ret) {
                     if (r.fee !== undefined && r.fee !== null) {
@@ -760,8 +704,6 @@
                     }
                 }
             }
-
-            // Сохраняем признаки для экспорта
             currentTransactionFeatures = {
                 tx_hour: txHour,
                 bandwidth_usage: bandwidthUsage,
@@ -772,7 +714,6 @@
                 has_token_transfer: hasTokenTransfer
             };
 
-            // Обновляем UI
             document.getElementById('txHour').textContent = txHour;
             document.getElementById('isContractCall').textContent = isContractCall;
             document.getElementById('bandwidthUsage').textContent = bandwidthUsage;
@@ -782,7 +723,6 @@
             document.getElementById('resultSuccess').textContent = resultSuccess === 1 ? 'Успешно (1)' : 'Неуспешно (0)';
             document.getElementById('paidFeeS').textContent = `${paidFeeS} SUN`;
 
-            // Активируем кнопку экспорта
             document.getElementById('exportTxBtn').disabled = false;
         }
 
@@ -794,7 +734,6 @@
             const ageMonths = Math.floor(ageDays / 30);
             const ageYears = Math.floor(ageDays / 365);
             
-            // Форматируем с акцентом на минутах, но добавляем удобные единицы
             if (ageYears > 0) {
                 return `${ageMinutes} мин. (~${ageYears} ${ageYears === 1 ? 'год' : ageYears < 5 ? 'года' : 'лет'})`;
             } else if (ageMonths > 0) {
@@ -811,18 +750,13 @@
         }
 
         async function getOldestInputCreationTime(addresses, currentTimestamp, currentTxHash) {
-            // Находим время создания самой старой "монеты" (входящей транзакции) для всех адресов-отправителей
-            // Это аналогично нахождению самой старой UTXO в Bitcoin
             let oldestTimestamp = null;
             
             try {
-                // Ограничиваемся первыми 3 адресами из-за ограничений API
                 const addressesToCheck = addresses.slice(0, 3);
                 const timestampPromises = [];
                 
                 for (const address of addressesToCheck) {
-                    // Для каждого адреса-отправителя ищем самую старую входящую транзакцию
-                    // (когда средства поступили на этот адрес)
                     timestampPromises.push(
                         getOldestIncomingTransactionForAddress(address, currentTimestamp, currentTxHash)
                             .catch(() => null)
@@ -833,7 +767,6 @@
                 const validTimestamps = timestamps.filter(ts => ts !== null && ts < currentTimestamp);
                 
                 if (validTimestamps.length > 0) {
-                    // Берем самую старую из всех входящих транзакций
                     oldestTimestamp = Math.min(...validTimestamps);
                 }
                 
@@ -845,15 +778,11 @@
         }
 
         async function getOldestIncomingTransactionForAddress(address, maxTimestamp, excludeTxHash) {
-            // Находим самую старую входящую транзакцию для адреса
-            // Это когда средства впервые поступили на адрес (аналог самой старой "купюры" в Bitcoin)
             try {
-                // Используем более эффективный подход: получаем транзакции с сортировкой по возрастанию
-                // и ищем первую входящую транзакцию
                 let oldestIncomingTx = null;
                 let fingerprint = null;
                 let page = 0;
-                const maxPages = 10; // Увеличиваем для более точного поиска
+                const maxPages = 10;
                 
                 while (page < maxPages) {
                     let url = `https://api.trongrid.io/v1/accounts/${address}/transactions?limit=200&order_by=block_timestamp,asc`;
@@ -873,19 +802,15 @@
                     const data = await response.json();
                     if (!data.data || data.data.length === 0) break;
                     
-                    // Ищем самую старую входящую транзакцию в этой странице
                     for (const tx of data.data) {
                         const txHash = tx.txID || tx.transactionHash || '';
                         const txTimestamp = tx.block_timestamp || tx.raw_data?.timestamp || 0;
                         
-                        // Пропускаем текущую транзакцию и транзакции после неё
                         if (txHash === excludeTxHash) continue;
                         if (txTimestamp >= maxTimestamp) {
-                            // Дошли до текущего времени, больше искать не нужно
                             return oldestIncomingTx ? (oldestIncomingTx.block_timestamp || oldestIncomingTx.raw_data?.timestamp) : null;
                         }
                         
-                        // Проверяем, является ли транзакция входящей для нашего адреса
                         if (isIncomingTransaction(tx, address)) {
                             if (!oldestIncomingTx || txTimestamp < (oldestIncomingTx.block_timestamp || oldestIncomingTx.raw_data?.timestamp || Infinity)) {
                                 oldestIncomingTx = tx;
@@ -893,14 +818,13 @@
                         }
                     }
                     
-                    // Если нашли самую старую в первой странице, можно вернуть
                     if (oldestIncomingTx && page === 0) {
                         const oldestTs = oldestIncomingTx.block_timestamp || oldestIncomingTx.raw_data?.timestamp;
-                        // Если нашли транзакцию в первых результатах, она уже самая старая
+                      
                         return oldestTs;
                     }
                     
-                    // Переходим к следующей странице
+             
                     if (data.meta && data.meta.fingerprint) {
                         fingerprint = data.meta.fingerprint;
                         page++;
@@ -917,31 +841,25 @@
         }
 
         function isIncomingTransaction(tx, address) {
-            // Проверяет, является ли транзакция входящей для указанного адреса
             const contracts = tx.raw_data?.contract || [];
             
             for (const contract of contracts) {
                 const contractType = contract.type || '';
                 const value = contract.parameter?.value || {};
                 
-                // TransferContract - перевод TRX
                 if (contractType === 'TransferContract' || contractType.includes('Transfer')) {
                     if (value.to_address === address && value.owner_address !== address) {
                         return true;
                     }
                 }
                 
-                // TransferAssetContract - перевод токенов
                 if (contractType === 'TransferAssetContract' || contractType.includes('TransferAsset')) {
                     if (value.to_address === address && value.owner_address !== address) {
                         return true;
                     }
                 }
                 
-                // TriggerSmartContract с переводами
                 if (contractType === 'TriggerSmartContract') {
-                    // Могут быть внутренние переводы через смарт-контракты
-                    // Проверяем информацию о внутренних транзакциях
                     if (tx.internal_transactions) {
                         for (const internalTx of tx.internal_transactions) {
                             if (internalTx.to === address && internalTx.from !== address) {
@@ -951,14 +869,12 @@
                     }
                 }
                 
-                // MultiSignContract
                 if (contractType === 'MultiSignContract') {
                     if (value.addresses && Array.isArray(value.addresses) && value.addresses.includes(address)) {
                         return true;
                     }
                 }
                 
-                // TransferContract с множественными переводами (transfers)
                 if (value.transfers && Array.isArray(value.transfers)) {
                     if (value.transfers.some(t => t.to === address && t.from !== address)) {
                         return true;
@@ -992,7 +908,6 @@
             const txResults = document.getElementById('txResults');
             const txError = document.getElementById('txError');
 
-            // Скрыть предыдущие результаты (включая результаты транзакций)
             results.classList.remove('show');
             error.classList.remove('show');
             txResults.classList.remove('show');
@@ -1002,7 +917,6 @@
             exportBtn.disabled = true;
 
             try {
-                // Используем TronGrid API для получения блока
                 const response = await fetch('https://api.trongrid.io/wallet/getblockbynum', {
                     method: 'POST',
                     headers: {
@@ -1023,11 +937,9 @@
                     throw new Error(data.Error);
                 }
 
-                // Получаем транзакции
                 const transactions = data.transactions || [];
                 currentTransactions = transactions;
 
-                // Отображаем количество транзакций
                 document.getElementById('transactionCount').textContent = transactions.length;
                 results.classList.add('show');
                 exportBtn.disabled = false;
@@ -1053,7 +965,6 @@
             }
 
             try {
-                // Подготавливаем данные для Excel
                 const excelData = currentTransactions.map((tx, index) => {
                     const txID = tx.txID || tx.transactionHash || 'N/A';
                     const blockNumber = currentBlockNumber;
@@ -1062,7 +973,6 @@
                         ? (tx.raw_data.contract[0].type || 'N/A') 
                         : 'N/A';
                     
-                    // Пытаемся извлечь информацию о контракте
                     let contractInfo = 'N/A';
                     if (tx.raw_data && tx.raw_data.contract && tx.raw_data.contract.length > 0) {
                         const contract = tx.raw_data.contract[0];
@@ -1082,11 +992,9 @@
                     };
                 });
 
-                // Создаем рабочую книгу
                 const wb = XLSX.utils.book_new();
                 const ws = XLSX.utils.json_to_sheet(excelData);
 
-                // Настраиваем ширину колонок
                 const colWidths = [
                     { wch: 5 },  // №
                     { wch: 70 }, // ID транзакции
@@ -1098,10 +1006,8 @@
                 ];
                 ws['!cols'] = colWidths;
 
-                // Добавляем лист в книгу
                 XLSX.utils.book_append_sheet(wb, ws, 'Транзакции');
 
-                // Сохраняем файл
                 const fileName = `tron_block_${currentBlockNumber}_transactions.xlsx`;
                 XLSX.writeFile(wb, fileName);
 
@@ -1110,7 +1016,6 @@
             }
         }
 
-        // Поиск по Enter
         document.getElementById('blockNumber').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 searchBlock();
@@ -1130,7 +1035,7 @@
             }
 
             try {
-                // Подготавливаем данные в формате: Признак | Значение
+      
                 const excelData = [
                     {
                         'Признак': 'tx_hour',
@@ -1162,21 +1067,17 @@
                     }
                 ];
 
-                // Создаем рабочую книгу
                 const wb = XLSX.utils.book_new();
                 const ws = XLSX.utils.json_to_sheet(excelData);
 
-                // Настраиваем ширину колонок
                 const colWidths = [
                     { wch: 25 },  // Признак
                     { wch: 15 }   // Значение
                 ];
                 ws['!cols'] = colWidths;
 
-                // Добавляем лист в книгу
                 XLSX.utils.book_append_sheet(wb, ws, 'Признаки транзакции');
 
-                // Сохраняем файл
                 const txHash = document.getElementById('txHash').value.trim();
                 const fileName = txHash ? `tron_tx_${txHash.substring(0, 16)}_features.xlsx` : 'tron_transaction_features.xlsx';
                 XLSX.writeFile(wb, fileName);
