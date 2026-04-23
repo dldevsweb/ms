@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>ПРИЛОЖЕНИЕ А. ПСЕВДОКОД АЛГОРИТМА АДАПТАЦИИ</title>
+</head>
+<body>
+    <h1>ПРИЛОЖЕНИЕ А. ПСЕВДОКОД АЛГОРИТМА АДАПТАЦИИ</h1>
+    <p>Алгоритм выполняется каждые 5 мин по расписанию cron и обновляет выражения триггеров Zabbix через API trigger.update.</p>
+    <p><strong>Алгоритм 1: AdaptiveThresholdUpdate</strong></p>
+    <p>Вход: N – множество узлов; M – метрики; k, Δt, δ, α, β – параметры</p>
+    <p>Выход: обновлённые выражения триггеров T<sub>ij</sub> для всех n<sub>i</sub> ∈ N, m<sub>j</sub> ∈ M</p>
+    <pre>
+1:  for each nᵢ ∈ N do
+2:      dᵢ ← MedianRTT(nᵢ, last=10)          // скользящая медиана RTT
+3:      for each mⱼ ∈ M do
+4:          H ← GetHistory(nᵢ, mⱼ, [t−dᵢ−Δt; t−dᵢ])  // скорр. окно
+5:          μᵢⱼ ← EWMA(H, α)                  // взвешенное среднее
+6:          σᵢⱼ ← WeightedStd(H, α)           // взвешенное СКО
+7:          (Lₜ, Bₜ) ← HoltUpdate(H, α, β)   // уровень и тренд
+8:          X̂ᵢⱼ ← Lₜ + δ·Bₜ                  // прогноз на горизонт δ
+9:          Tᵢⱼ ← μᵢⱼ + k·σᵢⱼ + X̂ᵢⱼ          // адаптивный порог
+10:         expr ← "{host:metric.last()} > " + Tᵢⱼ
+11:         ZabbixAPI.trigger_update(nᵢ, mⱼ, expr)
+12:     end for
+13: end for
+    </pre>
+    <p>Сложность: O(|N|·|M|·Δt) ≈ O(5040) при |N|=7, |M|=12, Δt=60</p>
+    <p>Реализация на Python 3 с использованием стандартных библиотек (statistics, requests) будет опубликована в открытом репозитории при принятии статьи к печати.</p>
+</body>
+</html>
