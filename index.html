@@ -399,8 +399,10 @@
         </div>
         <div class="row s-footer__bottom">
             <div class="column" style="text-align: center;">
-                <span style="color:white">© Copyright | DL <span style="color:#f9861a;font-weight: bold;">Devs</span></span> 
+                <span style="color:white">© Copyright | DL <span style="color:#f9861a;font-weight: bold;">Devs</span></span>
                 <span style="color:white"><script>document.write(new Date().getFullYear());</script> год</span>
+                <br>
+                <a href="#" id="privacy-link" style="color:#aaa;font-size:12px;text-decoration:underline;margin-top:6px;display:inline-block;">Политика конфиденциальности</a>
             </div>
             <div class="ss-go-top">
                 <a class="smoothscroll" title="Back to Top" href="#top">
@@ -409,6 +411,62 @@
             </div>
         </div>
     </footer>
+
+    <!-- Политика конфиденциальности — модальное окно -->
+    <div id="privacy-modal" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);overflow-y:auto;">
+        <div style="background:#1a1a1a;color:#ccc;max-width:740px;margin:60px auto;padding:40px 44px;border-radius:8px;position:relative;font-family:'Gothic A1',sans-serif;line-height:1.7;font-size:15px;">
+            <button id="privacy-close" style="position:absolute;top:16px;right:20px;background:none;border:none;color:#aaa;font-size:26px;cursor:pointer;line-height:1;">&times;</button>
+            <h2 style="color:#fff;margin-bottom:20px;font-size:22px;">Политика конфиденциальности</h2>
+            <p>Настоящая Политика конфиденциальности регулирует порядок обработки и использования персональных данных пользователей сайта <strong style="color:#f9861a;">DL Devs</strong> (далее — «Сайт»).</p>
+
+            <h4 style="color:#fff;margin:22px 0 8px;">1. Общие положения</h4>
+            <p>Сайт функционирует в соответствии с требованиями законодательства Российской Федерации, в том числе Федерального закона от 27.07.2006 № 152-ФЗ «О персональных данных», а также Федерального закона от 27.07.2006 № 149-ФЗ «Об информации, информационных технологиях и о защите информации».</p>
+
+            <h4 style="color:#fff;margin:22px 0 8px;">2. Сбор и использование данных</h4>
+            <p>Сайт может собирать следующие данные, добровольно предоставляемые пользователем: имя, адрес электронной почты и иные контактные сведения, необходимые для связи. Данные используются исключительно в целях обратной связи и не передаются третьим лицам без согласия пользователя, за исключением случаев, предусмотренных законодательством РФ.</p>
+
+            <h4 style="color:#fff;margin:22px 0 8px;">3. Файлы cookie</h4>
+            <p>Сайт может использовать файлы cookie для корректной работы функциональных элементов. Файлы cookie не содержат персональных данных. Пользователь вправе отключить их в настройках браузера.</p>
+
+            <h4 style="color:#fff;margin:22px 0 8px;">4. Ограничение ответственности</h4>
+            <p>Сайт не несёт ответственности за действия третьих лиц, получивших доступ к данным вследствие обстоятельств, находящихся вне разумного контроля администрации. Вся информация на Сайте носит исключительно информационный характер. Администрация Сайта не несёт ответственности за возможные убытки или ущерб, возникшие в результате использования или невозможности использования материалов Сайта.</p>
+
+            <h4 style="color:#fff;margin:22px 0 8px;">5. Ссылки на сторонние ресурсы</h4>
+            <p>Сайт может содержать ссылки на внешние ресурсы. Администрация не несёт ответственности за содержание, политику конфиденциальности или практику сторонних сайтов.</p>
+
+            <h4 style="color:#fff;margin:22px 0 8px;">6. Права пользователей</h4>
+            <p>Пользователь вправе в любое время обратиться к администрации Сайта с запросом об уточнении, блокировке или уничтожении своих персональных данных, направив обращение на адрес: <a href="mailto:dl.devs.web@gmail.com" style="color:#f9861a;">dl.devs.web@gmail.com</a>.</p>
+
+            <h4 style="color:#fff;margin:22px 0 8px;">7. Изменения политики</h4>
+            <p>Администрация оставляет за собой право вносить изменения в настоящую Политику конфиденциальности. Актуальная версия всегда размещена на данной странице.</p>
+
+            <p style="margin-top:28px;font-size:13px;color:#777;">Дата последнего обновления: май 2025 г.</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('privacy-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('privacy-modal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+        document.getElementById('privacy-close').addEventListener('click', function() {
+            document.getElementById('privacy-modal').style.display = 'none';
+            document.body.style.overflow = '';
+        });
+        document.getElementById('privacy-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.getElementById('privacy-modal').style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
     <!-- P -->
     <div aria-hidden="true" class="pswp" role="dialog" tabindex="-1">
         <div class="pswp__bg"></div>
