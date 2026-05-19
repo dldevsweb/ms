@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html class="no-js" lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Образовательный портал | DL Devs</title>
+    <meta name="description" content="Образовательный портал DL Devs — учебные материалы и файлы по главам">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/vendor.css">
+    <script defer src="js/modernizr.js"></script>
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <style>
+        /* ── Общие сбросы ── */
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            background: #111;
+            color: #ccc;
+            font-family: 'Gothic A1', sans-serif;
+            margin: 0;
+        }
+
+        /* ── Шапка (повторяет стиль главного сайта) ── */
+        .learn-header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(17,17,17,.97);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            height: 66px;
+            border-bottom: 1px solid rgba(255,255,255,.07);
+        }
+        .learn-header .logo a {
+            font-family: 'Gothic A1', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+        .learn-header .logo a span { color: #f9861a; }
+        .learn-header nav a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 13px;
+            margin-left: 28px;
+            letter-spacing: .5px;
+            transition: color .2s;
+        }
+        .learn-header nav a:hover { color: #f9861a; }
+        .learn-header .btn-back {
+            margin-left: 28px;
+            border: 1px solid #f9861a;
+            color: #f9861a;
+            padding: 7px 18px;
+            border-radius: 3px;
+            font-size: 12px;
+            text-decoration: none;
+            letter-spacing: .5px;
+            transition: background .2s, color .2s;
+        }
+        .learn-header .btn-back:hover {
+            background: #f9861a;
+            color: #111;
+        }
+
+        /* ── Hero-полоса ── */
+        .learn-hero {
+            margin-top: 66px;
+            padding: 72px 40px 56px;
+            background: linear-gradient(135deg, #161616 0%, #1e1e1e 100%);
+            border-bottom: 2px solid #f9861a;
+            text-align: center;
+        }
+        .learn-hero .subhead {
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #f9861a;
+            margin-bottom: 14px;
+        }
+        .learn-hero h1 {
+            font-size: clamp(28px, 5vw, 52px);
+            color: #fff;
+            font-weight: 700;
+            line-height: 1.2;
+            margin: 0 0 18px;
+        }
+        .learn-hero p {
+            color: #888;
+            font-size: 15px;
+            max-width: 580px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* ── Контент ── */
+        .learn-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 60px 24px 80px;
+        }
+
+        /* ── Глава (аккордеон) ── */
+        .chapter {
+            margin-bottom: 18px;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 6px;
+            overflow: hidden;
+            background: #161616;
+        }
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 28px;
+            cursor: pointer;
+            user-select: none;
+            transition: background .2s;
+        }
+        .chapter-header:hover { background: #1e1e1e; }
+        .chapter-header.open { background: #1e1e1e; }
+
+        .chapter-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .chapter-num {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: #f9861a;
+            color: #111;
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .chapter-name {
+            color: #fff;
+            font-size: 17px;
+            font-weight: 600;
+        }
+        .chapter-count {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+        .chapter-arrow {
+            width: 22px; height: 22px;
+            border: 1px solid #444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform .3s, border-color .2s;
+            flex-shrink: 0;
+        }
+        .chapter-arrow svg { fill: #888; transition: fill .2s; }
+        .chapter-header.open .chapter-arrow {
+            transform: rotate(180deg);
+            border-color: #f9861a;
+        }
+        .chapter-header.open .chapter-arrow svg { fill: #f9861a; }
+
+        /* ── Список файлов ── */
+        .chapter-body {
+            display: none;
+            padding: 6px 28px 22px;
+            border-top: 1px solid rgba(255,255,255,.06);
+        }
+        .chapter-body.open { display: block; }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255,255,255,.05);
+            text-decoration: none;
+            transition: background .15s;
+            border-radius: 4px;
+        }
+        .file-item:last-child { border-bottom: none; }
+        .file-item:hover .file-icon { background: #f9861a; }
+        .file-item:hover .file-icon svg { fill: #111; }
+        .file-item:hover .file-title { color: #f9861a; }
+
+        .file-icon {
+            width: 40px; height: 40px;
+            background: rgba(249,134,26,.12);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background .2s;
+        }
+        .file-icon svg { fill: #f9861a; transition: fill .2s; }
+
+        .file-info { flex: 1; }
+        .file-title {
+            color: #ddd;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            transition: color .2s;
+        }
+        .file-meta { color: #555; font-size: 12px; }
+
+        .file-badge {
+            font-size: 11px;
+            background: rgba(249,134,26,.15);
+            color: #f9861a;
+            border-radius: 3px;
+            padding: 3px 10px;
+            letter-spacing: .5px;
+            flex-shrink: 0;
+        }
+
+        /* ── Прогресс-статистика ── */
+        .learn-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            flex: 1;
+            min-width: 160px;
+            background: #161616;
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 6px;
+            padding: 20px 22px;
+            text-align: center;
+        }
+        .stat-num {
+            font-size: 32px;
+            font-weight: 700;
+            color: #f9861a;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+        .stat-label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* ── Футер ── */
+        .learn-footer {
+            background: #0e0e0e;
+            border-top: 1px solid rgba(255,255,255,.06);
+            text-align: center;
+            padding: 28px 20px;
+            font-size: 12px;
+            color: #555;
+        }
+        .learn-footer span { color: #f9861a; font-weight: 700; }
+
+        @media (max-width: 600px) {
+            .learn-header { padding: 0 18px; }
+            .learn-hero { padding: 54px 20px 40px; }
+            .chapter-header { padding: 18px 18px; }
+            .chapter-body { padding: 6px 18px 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка -->
+    <header class="learn-header">
+        <div class="logo">
+            <a href="index.html"><span>DL</span> Devs</a>
+        </div>
+        <nav>
+            <a href="index.html">Главная</a>
+            <a href="index.html#c">Контакты</a>
+            <a href="index.html" class="btn-back">← На сайт</a>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="learn-hero">
+        <p class="subhead">DL Devs · Обучение</p>
+        <h1>Образовательный портал</h1>
+        <p>Учебные материалы разбиты по главам. Нажмите на главу, чтобы раскрыть список файлов.</p>
+    </section>
+
+    <!-- Контент -->
+    <div class="learn-content">
+
+        <!-- Статистика -->
+        <div class="learn-stats">
+            <div class="stat-card">
+                <div class="stat-num">2</div>
+                <div class="stat-label">Главы</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">4</div>
+                <div class="stat-label">Файла</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">PDF</div>
+                <div class="stat-label">Формат</div>
+            </div>
+        </div>
+
+        <!-- Глава 1 -->
+        <div class="chapter">
+            <div class="chapter-header open" onclick="toggleChapter(this)">
+                <div class="chapter-title">
+                    <div class="chapter-num">1</div>
+                    <div>
+                        <div class="chapter-name">Глава 1</div>
+                        <div class="chapter-count">3 файла</div>
+                    </div>
+                </div>
+                <div class="chapter-arrow">
+                    <svg width="12" height="12" viewBox="0 0 24 24"><path d="M12 16.5l-8-8h16z"/></svg>
+                </div>
+            </div>
+            <div class="chapter-body open">
+
+                <a href="l/11.pdf" target="_blank" class="file-item">
+                    <div class="file-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg>
+                    </div>
+                    <div class="file-info">
+                        <div class="file-title">Файл 1</div>
+                        <div class="file-meta">l/11.pdf</div>
+                    </div>
+                    <div class="file-badge">PDF</div>
+                </a>
+
+                <a href="l/12.pdf" target="_blank" class="file-item">
+                    <div class="file-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg>
+                    </div>
+                    <div class="file-info">
+                        <div class="file-title">Файл 2</div>
+                        <div class="file-meta">l/12.pdf</div>
+                    </div>
+                    <div class="file-badge">PDF</div>
+                </a>
+
+                <a href="l/13.pdf" target="_blank" class="file-item">
+                    <div class="file-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg>
+                    </div>
+                    <div class="file-info">
+                        <div class="file-title">Файл 3</div>
+                        <div class="file-meta">l/13.pdf</div>
+                    </div>
+                    <div class="file-badge">PDF</div>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- Глава 2 -->
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <div class="chapter-title">
+                    <div class="chapter-num">2</div>
+                    <div>
+                        <div class="chapter-name">Глава 2</div>
+                        <div class="chapter-count">1 файл</div>
+                    </div>
+                </div>
+                <div class="chapter-arrow">
+                    <svg width="12" height="12" viewBox="0 0 24 24"><path d="M12 16.5l-8-8h16z"/></svg>
+                </div>
+            </div>
+            <div class="chapter-body">
+
+                <a href="l/21.pdf" target="_blank" class="file-item">
+                    <div class="file-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg>
+                    </div>
+                    <div class="file-info">
+                        <div class="file-title">Файл 1</div>
+                        <div class="file-meta">l/21.pdf</div>
+                    </div>
+                    <div class="file-badge">PDF</div>
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Футер -->
+    <footer class="learn-footer">
+        © <script>document.write(new Date().getFullYear())</script> | DL <span>Devs</span> · Образовательный портал
+    </footer>
+
+    <script>
+        function toggleChapter(header) {
+            const body = header.nextElementSibling;
+            const isOpen = header.classList.contains('open');
+            header.classList.toggle('open', !isOpen);
+            body.classList.toggle('open', !isOpen);
+        }
+    </script>
+
+</body>
+</html>
