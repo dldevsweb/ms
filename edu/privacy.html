@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Политика конфиденциальности | DL Devs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            background: #111;
+            color: #ccc;
+            font-family: 'Gothic A1', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .learn-header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(17,17,17,.97);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            height: 66px;
+            border-bottom: 1px solid rgba(255,255,255,.07);
+        }
+        .learn-header .logo a {
+            font-weight: 700;
+            font-size: 22px;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+        .learn-header .logo a span { color: #f9861a; }
+        .learn-header .btn-back {
+            border: 1px solid #f9861a;
+            color: #f9861a;
+            padding: 7px 18px;
+            border-radius: 3px;
+            font-size: 12px;
+            text-decoration: none;
+            letter-spacing: .5px;
+            transition: background .2s, color .2s;
+        }
+        .learn-header .btn-back:hover { background: #f9861a; color: #111; }
+
+        /* Hero */
+        .priv-hero {
+            margin-top: 66px;
+            padding: 64px 40px 48px;
+            background: linear-gradient(135deg, #161616 0%, #1e1e1e 100%);
+            border-bottom: 2px solid #f9861a;
+            text-align: center;
+        }
+        .priv-hero .subhead {
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #f9861a;
+            margin-bottom: 14px;
+        }
+        .priv-hero h1 {
+            font-size: clamp(24px, 4vw, 44px);
+            color: #fff;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        /* Content */
+        main {
+            flex: 1;
+            max-width: 760px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 56px 24px 72px;
+        }
+
+        .policy-intro {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #888;
+            margin-bottom: 40px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid rgba(255,255,255,.07);
+        }
+
+        .policy-section {
+            margin-bottom: 32px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+        .policy-section:last-of-type { border-bottom: none; }
+
+        h2 {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+        h2 .sec-num {
+            width: 30px; height: 30px;
+            background: #f9861a;
+            color: #111;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #888;
+        }
+
+        a { color: #f9861a; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .policy-date {
+            margin-top: 32px;
+            font-size: 12px;
+            color: #444;
+            letter-spacing: .5px;
+        }
+
+        /* Footer */
+        .learn-footer {
+            background: #0e0e0e;
+            border-top: 1px solid rgba(255,255,255,.06);
+            text-align: center;
+            padding: 28px 20px;
+            font-size: 12px;
+            color: #555;
+        }
+        .learn-footer span { color: #f9861a; font-weight: 700; }
+        .learn-footer a { color: #666; text-decoration: none; }
+        .learn-footer a:hover { color: #f9861a; }
+
+        @media (max-width: 600px) {
+            .learn-header { padding: 0 18px; }
+            .priv-hero { padding: 50px 20px 36px; }
+            main { padding: 36px 18px 52px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="learn-header">
+    <div class="logo">
+        <a href="index.html"><span>DL</span> Devs</a>
+    </div>
+    <a href="index.html" class="btn-back">← На портал</a>
+</header>
+
+<div class="priv-hero">
+    <p class="subhead">DL Devs · Документы</p>
+    <h1>Политика конфиденциальности</h1>
+</div>
+
+<main>
+    <p class="policy-intro">
+        Настоящая Политика конфиденциальности регулирует порядок обработки и использования персональных данных пользователей сайта DL Devs.
+    </p>
+
+    <div class="policy-section">
+        <h2><span class="sec-num">1</span>Общие положения</h2>
+        <p>Сайт функционирует в соответствии с требованиями законодательства Российской Федерации, в том числе Федерального закона от 27.07.2006 № 152-ФЗ «О персональных данных», а также Федерального закона от 27.07.2006 № 149-ФЗ «Об информации, информационных технологиях и о защите информации».</p>
+    </div>
+
+    <div class="policy-section">
+        <h2><span class="sec-num">2</span>Сбор и использование данных</h2>
+        <p>Сайт может собирать следующие данные, добровольно предоставляемые пользователем: имя, адрес электронной почты и иные контактные сведения, необходимые для связи. Данные используются исключительно в целях обратной связи и не передаются третьим лицам без согласия пользователя, за исключением случаев, предусмотренных законодательством РФ.</p>
+    </div>
+
+    <div class="policy-section">
+        <h2><span class="sec-num">3</span>Файлы cookie</h2>
+        <p>Сайт может использовать файлы cookie для корректной работы функциональных элементов. Файлы cookie не содержат персональных данных. Пользователь вправе отключить их в настройках браузера.</p>
+    </div>
+
+    <div class="policy-section">
+        <h2><span class="sec-num">4</span>Ограничение ответственности</h2>
+        <p>Сайт не несёт ответственности за действия третьих лиц, получивших доступ к данным вследствие обстоятельств, находящихся вне разумного контроля администрации. Вся информация на Сайте носит исключительно информационный характер. Администрация Сайта не несёт ответственности за возможные убытки или ущерб, возникшие в результате использования или невозможности использования материалов Сайта.</p>
+    </div>
+
+    <div class="policy-section">
+        <h2><span class="sec-num">5</span>Ссылки на сторонние ресурсы</h2>
+        <p>Сайт может содержать ссылки на внешние ресурсы. Администрация не несёт ответственности за содержание, политику конфиденциальности или практику сторонних сайтов.</p>
+    </div>
+
+    <div class="policy-section">
+        <h2><span class="sec-num">6</span>Права пользователей</h2>
+        <p>Пользователь вправе в любое время обратиться к администрации Сайта с запросом об уточнении, блокировке или уничтожении своих персональных данных, направив обращение на адрес: <a href="mailto:dl.devs.web@gmail.com">dl.devs.web@gmail.com</a>.</p>
+    </div>
+
+    <div class="policy-section">
+        <h2><span class="sec-num">7</span>Изменения политики</h2>
+        <p>Администрация оставляет за собой право вносить изменения в настоящую Политику конфиденциальности. Актуальная версия всегда размещена на данной странице.</p>
+    </div>
+
+    <p class="policy-date">Дата последнего обновления: май 2025 г.</p>
+</main>
+
+<footer class="learn-footer">
+    © <script>document.write(new Date().getFullYear())</script> | DL <span>Devs</span> · <a href="mailto:dl.devs.web@gmail.com">dl.devs.web@gmail.com</a>
+</footer>
+
+</body>
+</html>
